@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "cookingtime": 200,
+  "experience": 0.7,
+  "group": "meteoric_iron",
+  "ingredient": {
+    "item": "spacecraft:deepslate_meteoric_iron_ore"
+  },
+  "result": "spacecraft:meteoric_iron_ingot"
+}

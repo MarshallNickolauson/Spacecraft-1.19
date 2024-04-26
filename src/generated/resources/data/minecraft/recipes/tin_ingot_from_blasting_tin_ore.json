@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:blasting",
+  "cookingtime": 200,
+  "experience": 0.7,
+  "group": "tin",
+  "ingredient": {
+    "item": "spacecraft:tin_ore"
+  },
+  "result": "spacecraft:tin_ingot"
+}

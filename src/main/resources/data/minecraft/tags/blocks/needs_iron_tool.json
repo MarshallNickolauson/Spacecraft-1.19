@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "spacecraft:deepslate_aluminum_ore",
+    "spacecraft:deepslate_lead_ore",
+    "spacecraft:deepslate_meteoric_iron_ore",
+    "spacecraft:deepslate_palladium_ore",
+    "spacecraft:deepslate_silicon_ore",
+    "spacecraft:deepslate_tin_ore",
+    "spacecraft:deepslate_titanium_ore",
+    "spacecraft:deepslate_uranium_ore",
+    "spacecraft:aluminum_ore",
+    "spacecraft:lead_ore",
+    "spacecraft:meteoric_iron_ore",
+    "spacecraft:palladium_ore",
+    "spacecraft:silicon_ore",
+    "spacecraft:tin_ore",
+    "spacecraft:titanium_ore",
+    "spacecraft:uranium_ore"
+  ]
+}

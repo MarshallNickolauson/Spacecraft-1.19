@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:blasting",
+  "cookingtime": 200,
+  "experience": 0.7,
+  "group": "meteoric_iron",
+  "ingredient": {
+    "item": "spacecraft:meteoric_iron_ore"
+  },
+  "result": "spacecraft:meteoric_iron_ingot"
+}
