@@ -3,6 +3,8 @@ package net.marsh.spacecraft;
 import com.mojang.logging.LogUtils;
 import net.marsh.spacecraft.block.ModBlocks;
 import net.marsh.spacecraft.item.ModItems;
+import net.marsh.spacecraft.world.feature.ModConfiguredFeatures;
+import net.marsh.spacecraft.world.feature.ModPlacedFeatures;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -24,6 +26,9 @@ public class Spacecraft {
 
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
+
+        ModConfiguredFeatures.register(modEventBus);
+        ModPlacedFeatures.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
