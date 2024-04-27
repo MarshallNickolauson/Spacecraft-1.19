@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "spacecraft:block/coal_generator",
+    "side": "spacecraft:block/machine_side",
+    "top": "spacecraft:block/machine"
+  }
+}

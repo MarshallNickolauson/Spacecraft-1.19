@@ -1,6 +1,7 @@
 package net.marsh.spacecraft.block;
 
 import net.marsh.spacecraft.Spacecraft;
+import net.marsh.spacecraft.block.custom.CoalGeneratorBlock;
 import net.marsh.spacecraft.item.ModCreativeModTab;
 import net.marsh.spacecraft.item.ModItems;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -40,6 +41,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> TITANIUM_ORE = registerBlock("titanium_ore", () -> new DropExperienceBlock(BlockBehaviour.Properties.of(Material.STONE).strength(3.0F, 3.0F).requiresCorrectToolForDrops().sound(SoundType.STONE), UniformInt.of(3, 7)), ModCreativeModTab.SPACECRAFT_TAB);
     public static final RegistryObject<Block> URANIUM_ORE = registerBlock("uranium_ore", () -> new DropExperienceBlock(BlockBehaviour.Properties.of(Material.STONE).strength(3.0F, 3.0F).requiresCorrectToolForDrops().sound(SoundType.STONE).lightLevel(state -> 9), UniformInt.of(3, 7)), ModCreativeModTab.SPACECRAFT_TAB);
 
+    public static final RegistryObject<Block> COAL_GENERATOR = registerBlock("coal_generator", () -> new CoalGeneratorBlock(BlockBehaviour.Properties.of(Material.METAL).strength(3f).noOcclusion()), ModCreativeModTab.SPACECRAFT_TAB);
 
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block, CreativeModeTab tab) {

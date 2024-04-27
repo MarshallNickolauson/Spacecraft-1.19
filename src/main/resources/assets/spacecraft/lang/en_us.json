@@ -47,5 +47,7 @@
   "block.spacecraft.silicon_ore": "Silicon Ore",
   "block.spacecraft.tin_ore": "Tin Ore",
   "block.spacecraft.titanium_ore": "Titanium Ore",
-  "block.spacecraft.uranium_ore": "Uranium Ore"
+  "block.spacecraft.uranium_ore": "Uranium Ore",
+
+  "block.spacecraft.coal_generator": "Coal Generator"
 }
