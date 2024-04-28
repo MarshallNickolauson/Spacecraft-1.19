@@ -1,7 +1,10 @@
 package net.marsh.spacecraft.block.entity;
 
 import net.marsh.spacecraft.block.custom.CoalGeneratorBlock;
+import net.marsh.spacecraft.networking.ModMessages;
+import net.marsh.spacecraft.networking.packet.CoalGeneratorEnergySyncS2CPacket;
 import net.marsh.spacecraft.screen.CoalGeneratorMenu;
+import net.marsh.spacecraft.util.ModEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -20,6 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +38,16 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
         }
     };
 
+    private final ModEnergyStorage ENERGY_STORAGE = new ModEnergyStorage(2500, 100) {
+        @Override
+        public void onEnergyChanged() {
+            setChanged();
+            ModMessages.sendToClients(new CoalGeneratorEnergySyncS2CPacket(this.energy, getBlockPos()));
+        }
+    };
+
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
+    private LazyOptional<IEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
 
     protected final ContainerData data;
     private int burnTime = 0;
@@ -75,8 +88,20 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
         return new CoalGeneratorMenu(id, inventory, this, this.data);
     }
 
+    public IEnergyStorage getEnergyStorage() {
+        return ENERGY_STORAGE;
+    }
+
+    public void setEnergyLevel(int energy) {
+        this.ENERGY_STORAGE.setEnergy(energy);
+    }
+
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+        if(cap == ForgeCapabilities.ENERGY) {
+            return lazyEnergyHandler.cast();
+        }
+
         if(cap == ForgeCapabilities.ITEM_HANDLER) {
             return lazyItemHandler.cast();
         }
@@ -88,18 +113,21 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
     public void onLoad() {
         super.onLoad();
         lazyItemHandler = LazyOptional.of(() -> itemHandler);
+        lazyEnergyHandler = LazyOptional.of(() -> ENERGY_STORAGE);
     }
 
     @Override
     public void invalidateCaps() {
         super.invalidateCaps();
         lazyItemHandler.invalidate();
+        lazyEnergyHandler.invalidate();
     }
 
     @Override
     protected void saveAdditional(CompoundTag nbt) {
         nbt.put("inventory", itemHandler.serializeNBT());
         nbt.putInt("coal_generator_burn_time", this.burnTime);
+        nbt.putInt("coal_generator.energy", ENERGY_STORAGE.getEnergyStored());
         super.saveAdditional(nbt);
     }
 
@@ -108,6 +136,7 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
         super.load(nbt);
         itemHandler.deserializeNBT(nbt.getCompound("inventory"));
         burnTime = nbt.getInt("coal_generator_burn_time");
+        ENERGY_STORAGE.setEnergy(nbt.getInt("coal_generator.energy"));
     }
 
     public void drops() {
@@ -136,6 +165,7 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
 
         if (entity.burnTime > 0) {
             entity.burnTime--;
+            entity.ENERGY_STORAGE.receiveEnergy(25, false);
             state.setValue(CoalGeneratorBlock.LIT, true);
             level.setBlockAndUpdate(pos, state.setValue(CoalGeneratorBlock.LIT, true));
             setChanged(level, pos, state);

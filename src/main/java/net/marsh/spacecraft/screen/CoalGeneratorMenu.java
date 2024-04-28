@@ -43,6 +43,10 @@ public class CoalGeneratorMenu extends AbstractContainerMenu {
         return data.get(0) > 0;
     }
 
+    public CoalGeneratorBlockEntity getBlockEntity() {
+        return this.blockEntity;
+    }
+
     public int getFlameHeight() {
         int burnTime = data.get(0);
         return (int) Math.ceil((double) burnTime / 114.29);

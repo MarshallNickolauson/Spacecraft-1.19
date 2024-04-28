@@ -3,6 +3,7 @@ package net.marsh.spacecraft;
 import com.mojang.logging.LogUtils;
 import net.marsh.spacecraft.block.ModBlocks;
 import net.marsh.spacecraft.block.entity.ModBlockEntities;
+import net.marsh.spacecraft.networking.ModMessages;
 import net.marsh.spacecraft.screen.CoalGeneratorScreen;
 import net.marsh.spacecraft.screen.ModMenuTypes;
 import net.marsh.spacecraft.item.ModItems;
@@ -39,7 +40,7 @@ public class Spacecraft {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-
+        ModMessages.register();
     }
 
     @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
