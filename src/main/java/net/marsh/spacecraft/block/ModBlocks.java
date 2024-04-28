@@ -9,6 +9,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -41,8 +42,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> TITANIUM_ORE = registerBlock("titanium_ore", () -> new DropExperienceBlock(BlockBehaviour.Properties.of(Material.STONE).strength(3.0F, 3.0F).requiresCorrectToolForDrops().sound(SoundType.STONE), UniformInt.of(3, 7)), ModCreativeModTab.SPACECRAFT_TAB);
     public static final RegistryObject<Block> URANIUM_ORE = registerBlock("uranium_ore", () -> new DropExperienceBlock(BlockBehaviour.Properties.of(Material.STONE).strength(3.0F, 3.0F).requiresCorrectToolForDrops().sound(SoundType.STONE).lightLevel(state -> 9), UniformInt.of(3, 7)), ModCreativeModTab.SPACECRAFT_TAB);
 
-    public static final RegistryObject<Block> COAL_GENERATOR = registerBlock("coal_generator", () -> new CoalGeneratorBlock(BlockBehaviour.Properties.of(Material.METAL).strength(3f).noOcclusion()), ModCreativeModTab.SPACECRAFT_TAB);
-
+    public static final RegistryObject<Block> COAL_GENERATOR = registerBlock("coal_generator", () -> new CoalGeneratorBlock(BlockBehaviour.Properties.of(Material.METAL).strength(3f).noOcclusion().lightLevel(state -> state.getValue(CoalGeneratorBlock.LIT) ? 5 : 0)), ModCreativeModTab.SPACECRAFT_TAB);
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block, CreativeModeTab tab) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);
