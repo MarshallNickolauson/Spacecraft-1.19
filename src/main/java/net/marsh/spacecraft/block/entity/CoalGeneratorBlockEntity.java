@@ -122,7 +122,7 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if(cap == ForgeCapabilities.ENERGY) {
+        if(cap == ForgeCapabilities.ENERGY && side == Direction.EAST) {
             return lazyEnergyHandler.cast();
         }
 
