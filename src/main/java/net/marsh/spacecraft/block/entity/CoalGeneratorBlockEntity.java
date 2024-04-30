@@ -57,6 +57,15 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
             setChanged();
             ModMessages.sendToClients(new CoalGeneratorEnergySyncS2CPacket(this.energy, getBlockPos()));
         }
+
+        @Override
+        public int receiveEnergy(int maxReceive, boolean simulate) {
+            if (burnTime > 0) {
+                return super.receiveEnergy(maxReceive, simulate);
+            } else {
+                return 0;
+            }
+        }
     };
 
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
