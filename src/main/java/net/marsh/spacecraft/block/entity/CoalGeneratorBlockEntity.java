@@ -127,7 +127,8 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
     protected void saveAdditional(CompoundTag nbt) {
         nbt.put("inventory", itemHandler.serializeNBT());
         nbt.putInt("coal_generator_burn_time", this.burnTime);
-        nbt.putInt("coal_generator.energy", ENERGY_STORAGE.getEnergyStored());
+        nbt.putInt("coal_generator_energy", ENERGY_STORAGE.getEnergyStored());
+
         super.saveAdditional(nbt);
     }
 
@@ -136,7 +137,7 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
         super.load(nbt);
         itemHandler.deserializeNBT(nbt.getCompound("inventory"));
         burnTime = nbt.getInt("coal_generator_burn_time");
-        ENERGY_STORAGE.setEnergy(nbt.getInt("coal_generator.energy"));
+        ENERGY_STORAGE.setEnergy(nbt.getInt("coal_generator_energy"));
     }
 
     public void drops() {
@@ -149,7 +150,7 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, CoalGeneratorBlockEntity entity) {
-        if(level.isClientSide()) {
+        if (level.isClientSide()) {
             return;
         }
 
@@ -165,10 +166,16 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
 
         if (entity.burnTime > 0) {
             entity.burnTime--;
-            entity.ENERGY_STORAGE.receiveEnergy(25, false);
             state.setValue(CoalGeneratorBlock.LIT, true);
             level.setBlockAndUpdate(pos, state.setValue(CoalGeneratorBlock.LIT, true));
             setChanged(level, pos, state);
+            if (entity.ENERGY_STORAGE.getEnergyStored() < entity.ENERGY_STORAGE.getMaxEnergyStored()) {
+                entity.ENERGY_STORAGE.receiveEnergy(25, false);
+                setChanged(level, pos, state);
+            }
+        }
+        if (entity.ENERGY_STORAGE.getEnergyStored() == entity.ENERGY_STORAGE.getMaxEnergyStored()) {
+            ModMessages.sendToClients(new CoalGeneratorEnergySyncS2CPacket(entity.ENERGY_STORAGE.getEnergyStored(), pos));
         }
 
         if (entity.burnTime == 0) {
@@ -176,7 +183,6 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
             level.setBlockAndUpdate(pos, state.setValue(CoalGeneratorBlock.LIT, false));
             setChanged(level, pos, state);
         }
+
     }
-
-
 }

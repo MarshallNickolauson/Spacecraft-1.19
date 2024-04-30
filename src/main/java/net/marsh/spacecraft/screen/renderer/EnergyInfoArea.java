@@ -38,11 +38,20 @@ public class EnergyInfoArea extends InfoArea {
     public void draw(PoseStack transform) {
         final int height = area.getHeight();
         int stored = (int)(height*(energy.getEnergyStored()/(float)energy.getMaxEnergyStored()));
-        fillGradient(
+
+//        System.out.println(energy.getEnergyStored());
+//        System.out.println(energy.getMaxEnergyStored());
+//        System.out.println(stored);
+
+        if (energy.getEnergyStored() == energy.getMaxEnergyStored()) {
+            stored = height;
+        }
+
+        fill(
                 transform,
                 area.getX(), area.getY()+(height-stored),
                 area.getX() + area.getWidth(), area.getY() +area.getHeight(),
-                0xffffb515, 0xffffb515
+                0xffffb515
         );
     }
 }
