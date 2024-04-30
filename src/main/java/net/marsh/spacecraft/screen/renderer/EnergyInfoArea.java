@@ -39,10 +39,6 @@ public class EnergyInfoArea extends InfoArea {
         final int height = area.getHeight();
         int stored = (int)(height*(energy.getEnergyStored()/(float)energy.getMaxEnergyStored()));
 
-//        System.out.println(energy.getEnergyStored());
-//        System.out.println(energy.getMaxEnergyStored());
-//        System.out.println(stored);
-
         if (energy.getEnergyStored() == energy.getMaxEnergyStored()) {
             stored = height;
         }
