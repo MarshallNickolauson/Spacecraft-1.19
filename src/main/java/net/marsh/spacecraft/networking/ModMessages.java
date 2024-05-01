@@ -2,6 +2,7 @@ package net.marsh.spacecraft.networking;
 
 import net.marsh.spacecraft.Spacecraft;
 import net.marsh.spacecraft.networking.packet.CoalGeneratorEnergySyncS2CPacket;
+import net.marsh.spacecraft.networking.packet.ElectricFurnaceEnergySyncS2CPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -31,6 +32,12 @@ public class ModMessages {
                 .decoder(CoalGeneratorEnergySyncS2CPacket::new)
                 .encoder(CoalGeneratorEnergySyncS2CPacket::toBytes)
                 .consumerMainThread(CoalGeneratorEnergySyncS2CPacket::handle)
+                .add();
+
+        net.messageBuilder(ElectricFurnaceEnergySyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ElectricFurnaceEnergySyncS2CPacket::new)
+                .encoder(ElectricFurnaceEnergySyncS2CPacket::toBytes)
+                .consumerMainThread(ElectricFurnaceEnergySyncS2CPacket::handle)
                 .add();
     }
 

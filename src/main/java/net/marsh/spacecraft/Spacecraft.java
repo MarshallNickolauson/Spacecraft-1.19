@@ -5,6 +5,7 @@ import net.marsh.spacecraft.block.ModBlocks;
 import net.marsh.spacecraft.block.entity.ModBlockEntities;
 import net.marsh.spacecraft.networking.ModMessages;
 import net.marsh.spacecraft.screen.CoalGeneratorScreen;
+import net.marsh.spacecraft.screen.ElectricFurnaceScreen;
 import net.marsh.spacecraft.screen.ModMenuTypes;
 import net.marsh.spacecraft.item.ModItems;
 import net.marsh.spacecraft.world.feature.ModConfiguredFeatures;
@@ -48,6 +49,7 @@ public class Spacecraft {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             MenuScreens.register(ModMenuTypes.COAL_GENERATOR_MENU.get(), CoalGeneratorScreen::new);
+            MenuScreens.register(ModMenuTypes.ELECTRIC_FURNACE_MENU.get(), ElectricFurnaceScreen::new);
         }
     }
 }

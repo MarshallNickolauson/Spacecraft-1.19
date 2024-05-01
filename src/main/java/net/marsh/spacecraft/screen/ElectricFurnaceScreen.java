@@ -13,12 +13,12 @@ import net.minecraft.world.entity.player.Inventory;
 
 import java.util.Optional;
 
-public class CoalGeneratorScreen extends AbstractContainerScreen<CoalGeneratorMenu> {
+public class ElectricFurnaceScreen extends AbstractContainerScreen<ElectricFurnaceMenu> {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Spacecraft.MOD_ID, "textures/gui/coal_generator_screen.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(Spacecraft.MOD_ID, "textures/gui/electric_furnace_screen.png");
     private EnergyInfoArea energyInfoArea;
 
-    public CoalGeneratorScreen(CoalGeneratorMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
+    public ElectricFurnaceScreen(ElectricFurnaceMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
     }
 
@@ -31,7 +31,7 @@ public class CoalGeneratorScreen extends AbstractContainerScreen<CoalGeneratorMe
     private void assignEnergyInfoArea() {
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
-        energyInfoArea = new EnergyInfoArea(x + 152, y + 7, menu.blockEntity.getEnergyStorage());
+        energyInfoArea = new EnergyInfoArea(x + 8, y + 8, menu.blockEntity.getEnergyStorage());
     }
 
     @Override
@@ -42,14 +42,14 @@ public class CoalGeneratorScreen extends AbstractContainerScreen<CoalGeneratorMe
     }
 
     private void renderEnergyAreaTooltips(PoseStack pPoseStack, int pMouseX, int pMouseY, int x, int y) {
-        if(isMouseAboveArea(pMouseX, pMouseY, x, y, 152, 7, 16, 48)) {
+        if(isMouseAboveArea(pMouseX, pMouseY, x, y, 8, 8, 16, 48)) {
             renderTooltip(pPoseStack, energyInfoArea.getTooltips(),
                     Optional.empty(), pMouseX - x, pMouseY - y);
         }
     }
 
     @Override
-    protected void renderBg(PoseStack poseStack, float pPartialTick, int pMouseX, int pMouseY) {
+    protected void renderBg(PoseStack poseStack, float v, int i, int i1) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, TEXTURE);
@@ -58,15 +58,13 @@ public class CoalGeneratorScreen extends AbstractContainerScreen<CoalGeneratorMe
 
         this.blit(poseStack, x, y, 0, 0, imageWidth, imageHeight);
 
-        renderFlameProgress(poseStack, x, y);
+        renderProgressArrow(poseStack, x, y);
         energyInfoArea.draw(poseStack);
     }
 
-    private void renderFlameProgress(PoseStack poseStack, int x, int y) {
-        if (menu.isBurningCoal()) {
-            int flameHeight = menu.getFlameHeight();
-            int yOffset = 14 - flameHeight; // Calculate the offset to render from the top
-            blit(poseStack, x + 81, y + 45 + yOffset, 176, 14 - flameHeight, 13, flameHeight);
+    private void renderProgressArrow(PoseStack pPoseStack, int x, int y) {
+        if(menu.isCrafting()) {
+            blit(pPoseStack, x + 74, y + 34, 176, 0, menu.getScaledProgress(), 16);
         }
     }
 

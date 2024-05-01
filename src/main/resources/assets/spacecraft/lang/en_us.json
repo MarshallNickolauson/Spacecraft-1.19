@@ -49,5 +49,6 @@
   "block.spacecraft.titanium_ore": "Titanium Ore",
   "block.spacecraft.uranium_ore": "Uranium Ore",
 
-  "block.spacecraft.coal_generator": "Coal Generator"
+  "block.spacecraft.coal_generator": "Coal Generator",
+  "block.spacecraft.electric_furnace": "Electric Furnace"
 }

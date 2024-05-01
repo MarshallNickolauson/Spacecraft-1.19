@@ -77,7 +77,6 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
                     Direction.SOUTH, LazyOptional.of(() -> new WrappedHandler(itemHandler, (i) -> i == 0, (i, s) -> false)),
                     Direction.EAST, LazyOptional.of(() -> new WrappedHandler(itemHandler, (i) -> i == 0, (i, s) -> false)),
                     Direction.WEST, LazyOptional.of(() -> new WrappedHandler(itemHandler, (index) -> index == 0, (index, stack) -> itemHandler.isItemValid(0, stack)))
-
                     );
 
     private LazyOptional<IEnergyStorage> lazyEnergyHandler = LazyOptional.empty();

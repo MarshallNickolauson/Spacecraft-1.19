@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "spacecraft:block/electric_furnace",
+    "side": "spacecraft:block/machine_side",
+    "top": "spacecraft:block/machine",
+    "down": "spacecraft:block/machine_side",
+    "up": "spacecraft:block/machine",
+    "north": "spacecraft:block/electric_furnace",
+    "south": "spacecraft:block/machine_side",
+    "west": "spacecraft:block/machine_side",
+    "east": "spacecraft:block/machine_power_input"
+  }
+}
