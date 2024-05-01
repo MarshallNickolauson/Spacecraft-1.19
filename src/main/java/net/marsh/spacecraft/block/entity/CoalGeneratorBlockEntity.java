@@ -51,7 +51,7 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
         }
     };
 
-    private final ModBlockEnergyStorage ENERGY_STORAGE = new ModBlockEnergyStorage(2500, 100) {
+    private final ModBlockEnergyStorage ENERGY_STORAGE = new ModBlockEnergyStorage(2000, 100) {
         @Override
         public void onEnergyChanged() {
             setChanged();
@@ -229,11 +229,10 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
 
         if (entity.burnTime > 0) {
             entity.burnTime--;
-            state.setValue(CoalGeneratorBlock.LIT, true);
             level.setBlockAndUpdate(pos, state.setValue(CoalGeneratorBlock.LIT, true));
             setChanged(level, pos, state);
             if (entity.ENERGY_STORAGE.getEnergyStored() < entity.ENERGY_STORAGE.getMaxEnergyStored()) {
-                entity.ENERGY_STORAGE.receiveEnergy(25, false);
+                entity.ENERGY_STORAGE.receiveEnergy(21, false);
                 setChanged(level, pos, state);
             }
         }
@@ -241,7 +240,6 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
         loadEnergyBar(entity, pos);
 
         if (entity.burnTime == 0) {
-            state.setValue(CoalGeneratorBlock.LIT, false);
             level.setBlockAndUpdate(pos, state.setValue(CoalGeneratorBlock.LIT, false));
             setChanged(level, pos, state);
         }

@@ -1,9 +1,9 @@
 package net.marsh.spacecraft.block.entity;
 
-import net.marsh.spacecraft.block.custom.ElectricFurnaceBlock;
+import net.marsh.spacecraft.block.custom.ElectricArcFurnaceBlock;
 import net.marsh.spacecraft.networking.ModMessages;
-import net.marsh.spacecraft.networking.packet.ElectricFurnaceEnergySyncS2CPacket;
-import net.marsh.spacecraft.screen.ElectricFurnaceMenu;
+import net.marsh.spacecraft.networking.packet.ElectricArcFurnaceEnergySyncS2CPacket;
+import net.marsh.spacecraft.screen.ElectricArcFurnaceMenu;
 import net.marsh.spacecraft.util.ModBlockEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -35,9 +35,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.Optional;
 
-public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvider {
+public class ElectricArcFurnaceBlockEntity extends BlockEntity implements MenuProvider {
 
-    private final ItemStackHandler itemHandler = new ItemStackHandler(3) {
+    private final ItemStackHandler itemHandler = new ItemStackHandler(4) {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
@@ -50,19 +50,20 @@ public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvi
                 case 0 -> stack.getItem() == Items.DIAMOND;
                 case 1 -> true; // Allow insert of any item
                 case 2 -> false; // Prevent item insert into output slot
+                case 3 -> false; // Other output slot
                 default -> super.isItemValid(slot, stack);
             };
         }
     };
 
-    private final ModBlockEnergyStorage ENERGY_STORAGE = new ModBlockEnergyStorage(1000, 100) {
+    private final ModBlockEnergyStorage ENERGY_STORAGE = new ModBlockEnergyStorage(10000, 250) {
         @Override
         public void onEnergyChanged() {
             setChanged();
-            ModMessages.sendToClients(new ElectricFurnaceEnergySyncS2CPacket(this.energy, getBlockPos()));
+            ModMessages.sendToClients(new ElectricArcFurnaceEnergySyncS2CPacket(this.energy, getBlockPos()));
         }
     };
-    private static final int ENERGY_REQUIRED = 10;
+    private static final int ENERGY_REQUIRED = 100;
 
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
     private final Map<Direction, LazyOptional<WrappedHandler>> directionWrappedHandlerMap =
@@ -79,16 +80,16 @@ public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvi
 
     protected final ContainerData data;
     private int progress = 0;
-    private int maxProgress = 100;
+    private int maxProgress = 50;
 
-    public ElectricFurnaceBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(ModBlockEntities.ELECTRIC_FURNACE.get(), pPos, pBlockState);
+    public ElectricArcFurnaceBlockEntity(BlockPos pPos, BlockState pBlockState) {
+        super(ModBlockEntities.ELECTRIC_ARC_FURNACE.get(), pPos, pBlockState);
         this.data = new ContainerData() {
             @Override
             public int get(int index) {
                 return switch (index) {
-                    case 0 -> ElectricFurnaceBlockEntity.this.progress;
-                    case 1 -> ElectricFurnaceBlockEntity.this.maxProgress;
+                    case 0 -> ElectricArcFurnaceBlockEntity.this.progress;
+                    case 1 -> ElectricArcFurnaceBlockEntity.this.maxProgress;
                     default -> 0;
                 };
             }
@@ -96,8 +97,8 @@ public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvi
             @Override
             public void set(int index, int value) {
                 switch (index) {
-                    case 0 -> ElectricFurnaceBlockEntity.this.progress = value;
-                    case 1 -> ElectricFurnaceBlockEntity.this.maxProgress = value;
+                    case 0 -> ElectricArcFurnaceBlockEntity.this.progress = value;
+                    case 1 -> ElectricArcFurnaceBlockEntity.this.maxProgress = value;
                 }
             }
 
@@ -110,13 +111,13 @@ public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvi
 
     @Override
     public Component getDisplayName() {
-        return Component.literal("Electric Furnace");
+        return Component.literal("Electric Arc Furnace");
     }
 
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
-        return new ElectricFurnaceMenu(id, inventory, this, this.data);
+        return new ElectricArcFurnaceMenu(id, inventory, this, this.data);
     }
 
     public IEnergyStorage getEnergyStorage() {
@@ -131,7 +132,7 @@ public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvi
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap == ForgeCapabilities.ENERGY) {
             BlockState blockState = getBlockState();
-            Direction facingDirection = blockState.getValue(ElectricFurnaceBlock.FACING);
+            Direction facingDirection = blockState.getValue(ElectricArcFurnaceBlock.FACING);
 
             // Determine the direction based on the facing direction of the block
             Direction energyDirection = switch (facingDirection) {
@@ -153,7 +154,7 @@ public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvi
             }
 
             if (directionWrappedHandlerMap.containsKey(side)) {
-                Direction localDir = this.getBlockState().getValue(ElectricFurnaceBlock.FACING);
+                Direction localDir = this.getBlockState().getValue(ElectricArcFurnaceBlock.FACING);
 
                 if (side == Direction.UP || side == Direction.DOWN) {
                     return directionWrappedHandlerMap.get(side).cast();
@@ -188,8 +189,8 @@ public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvi
     @Override
     protected void saveAdditional(CompoundTag nbt) {
         nbt.put("inventory", itemHandler.serializeNBT());
-        nbt.putInt("electric_furnace_progress", this.progress);
-        nbt.putInt("electric_furnace.energy", ENERGY_STORAGE.getEnergyStored());
+        nbt.putInt("electric_arc_furnace_progress", this.progress);
+        nbt.putInt("electric_arc_furnace.energy", ENERGY_STORAGE.getEnergyStored());
 
         super.saveAdditional(nbt);
     }
@@ -198,8 +199,8 @@ public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvi
     public void load(CompoundTag nbt) {
         super.load(nbt);
         itemHandler.deserializeNBT(nbt.getCompound("inventory"));
-        progress = nbt.getInt("electric_furnace_progress");
-        ENERGY_STORAGE.setEnergy(nbt.getInt("electric_furnace.energy"));
+        progress = nbt.getInt("electric_arc_furnace_progress");
+        ENERGY_STORAGE.setEnergy(nbt.getInt("electric_arc_furnace.energy"));
     }
 
     public void drops() {
@@ -211,7 +212,7 @@ public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvi
         Containers.dropContents(this.level, this.worldPosition, inventory);
     }
 
-    public static void tick(Level level, BlockPos pos, BlockState state, ElectricFurnaceBlockEntity entity) {
+    public static void tick(Level level, BlockPos pos, BlockState state, ElectricArcFurnaceBlockEntity entity) {
         if (level.isClientSide()) {
             return;
         }
@@ -224,15 +225,15 @@ public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvi
         if (hasRecipe(entity)) {
             entity.progress++;
             entity.ENERGY_STORAGE.extractEnergy(ENERGY_REQUIRED, false);
-            level.setBlockAndUpdate(pos, state.setValue(ElectricFurnaceBlock.LIT, true));
+            level.setBlockAndUpdate(pos, state.setValue(ElectricArcFurnaceBlock.LIT, true));
             setChanged(level, pos, state);
 
-            if (entity.progress >= entity.maxProgress) {
+            if (entity.progress == entity.maxProgress) {
                 craftItem(entity);
             }
         } else {
             entity.resetProgress();
-            level.setBlockAndUpdate(pos, state.setValue(ElectricFurnaceBlock.LIT, false));
+            level.setBlockAndUpdate(pos, state.setValue(ElectricArcFurnaceBlock.LIT, false));
             setChanged(level, pos, state);
         }
 
@@ -244,9 +245,9 @@ public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvi
         }
     }
 
-    private static void loadEnergyBar(ElectricFurnaceBlockEntity entity, BlockPos pos) {
+    private static void loadEnergyBar(ElectricArcFurnaceBlockEntity entity, BlockPos pos) {
         if (entity.ENERGY_STORAGE.getEnergyStored() == entity.ENERGY_STORAGE.getMaxEnergyStored()) {
-            ModMessages.sendToClients(new ElectricFurnaceEnergySyncS2CPacket(entity.ENERGY_STORAGE.getEnergyStored(), pos));
+            ModMessages.sendToClients(new ElectricArcFurnaceEnergySyncS2CPacket(entity.ENERGY_STORAGE.getEnergyStored(), pos));
         }
     }
 
@@ -254,20 +255,24 @@ public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvi
         this.progress = 0;
     }
 
-    private static void craftItem(ElectricFurnaceBlockEntity entity) {
+    private static void craftItem(ElectricArcFurnaceBlockEntity entity) {
         ItemStack inputStack = entity.itemHandler.getStackInSlot(1);
         Optional<SmeltingRecipe> recipe = entity.level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SimpleContainer(inputStack), entity.level);
 
         if (hasRecipe(entity)) {
             entity.itemHandler.extractItem(1, 1, false);
+
             entity.itemHandler.setStackInSlot(2, new ItemStack(recipe.get().getResultItem().getItem(),
                     entity.itemHandler.getStackInSlot(2).getCount() + 1));
+
+            entity.itemHandler.setStackInSlot(3, new ItemStack(recipe.get().getResultItem().getItem(),
+                    entity.itemHandler.getStackInSlot(3).getCount() + 1));
 
             entity.resetProgress();
         }
     }
 
-    private static boolean hasRecipe(ElectricFurnaceBlockEntity entity) {
+    private static boolean hasRecipe(ElectricArcFurnaceBlockEntity entity) {
         SimpleContainer inventory = new SimpleContainer(entity.itemHandler.getSlots());
         for (int i = 0; i < entity.itemHandler.getSlots(); i++) {
             inventory.setItem(i, entity.itemHandler.getStackInSlot(i));
@@ -279,8 +284,12 @@ public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvi
     }
 
     private static boolean canInsertItemIntoOutputSlot(SimpleContainer inventory, ItemStack stack) {
-        return (inventory.getItem(2).getItem() == stack.getItem() || inventory.getItem(2).isEmpty())
-                && (inventory.getItem(2).getMaxStackSize() > inventory.getItem(2).getCount());
+        return(
+                (inventory.getItem(2).getItem() == stack.getItem() || inventory.getItem(2).isEmpty()) &&
+                (inventory.getItem(3).getItem() == stack.getItem() || inventory.getItem(3).isEmpty()) &&
+                (inventory.getItem(2).getMaxStackSize() > inventory.getItem(2).getCount()) &&
+                (inventory.getItem(3).getMaxStackSize() > inventory.getItem(3).getCount())
+        );
     }
 }
 

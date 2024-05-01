@@ -1,10 +1,9 @@
 package net.marsh.spacecraft.block.custom;
 
-import net.marsh.spacecraft.block.entity.CoalGeneratorBlockEntity;
+import net.marsh.spacecraft.block.entity.ElectricArcFurnaceBlockEntity;
 import net.marsh.spacecraft.block.entity.ModBlockEntities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -30,11 +29,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class CoalGeneratorBlock extends BaseEntityBlock {
+public class ElectricArcFurnaceBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty LIT = BooleanProperty.create("lit");
 
-    public CoalGeneratorBlock(Properties pProperties) {
+    public ElectricArcFurnaceBlock(Properties pProperties) {
         super(pProperties);
         this.registerDefaultState(this.stateDefinition.any().setValue(LIT, false));
     }
@@ -62,8 +61,9 @@ public class CoalGeneratorBlock extends BaseEntityBlock {
 
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable BlockGetter pLevel, List<Component> components, TooltipFlag pFlag) {
-        components.add(Component.literal("Generates energy by burning coal.").withStyle(ChatFormatting.WHITE));
-        components.add(Component.literal("Generates 21FE/tick").withStyle(ChatFormatting.GREEN));
+        components.add(Component.literal("Extremely fast furnace").withStyle(ChatFormatting.WHITE));
+        components.add(Component.literal("Dual item output").withStyle(ChatFormatting.WHITE));
+        components.add(Component.literal("Consumes 100FE/tick").withStyle(ChatFormatting.RED));
         super.appendHoverText(pStack, pLevel, components, pFlag);
     }
 
@@ -78,8 +78,8 @@ public class CoalGeneratorBlock extends BaseEntityBlock {
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         if (pState.getBlock() != pNewState.getBlock()) {
             BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-            if (blockEntity instanceof CoalGeneratorBlockEntity) {
-                ((CoalGeneratorBlockEntity) blockEntity).drops();
+            if (blockEntity instanceof ElectricArcFurnaceBlockEntity) {
+                ((ElectricArcFurnaceBlockEntity) blockEntity).drops();
             }
         }
         super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
@@ -89,8 +89,8 @@ public class CoalGeneratorBlock extends BaseEntityBlock {
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (!pLevel.isClientSide()) {
             BlockEntity entity = pLevel.getBlockEntity(pPos);
-            if(entity instanceof CoalGeneratorBlockEntity) {
-                NetworkHooks.openScreen(((ServerPlayer)pPlayer), (CoalGeneratorBlockEntity)entity, pPos);
+            if(entity instanceof ElectricArcFurnaceBlockEntity) {
+                NetworkHooks.openScreen(((ServerPlayer)pPlayer), (ElectricArcFurnaceBlockEntity)entity, pPos);
             } else {
                 throw new IllegalStateException("Our Container provider is missing!");
             }
@@ -102,12 +102,12 @@ public class CoalGeneratorBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new CoalGeneratorBlockEntity(pos, state);
+        return new ElectricArcFurnaceBlockEntity(pos, state);
     }
 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return createTickerHelper(type, ModBlockEntities.COAL_GENERATOR.get(), CoalGeneratorBlockEntity::tick);
+        return createTickerHelper(type, ModBlockEntities.ELECTRIC_ARC_FURNACE.get(), ElectricArcFurnaceBlockEntity::tick);
     }
 }
