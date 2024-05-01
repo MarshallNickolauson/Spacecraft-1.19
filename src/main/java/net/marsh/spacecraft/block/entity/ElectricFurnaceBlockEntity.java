@@ -2,10 +2,9 @@ package net.marsh.spacecraft.block.entity;
 
 import net.marsh.spacecraft.block.custom.CoalGeneratorBlock;
 import net.marsh.spacecraft.networking.ModMessages;
-import net.marsh.spacecraft.networking.packet.CoalGeneratorEnergySyncS2CPacket;
 import net.marsh.spacecraft.networking.packet.ElectricFurnaceEnergySyncS2CPacket;
 import net.marsh.spacecraft.screen.ElectricFurnaceMenu;
-import net.marsh.spacecraft.util.ModEnergyStorage;
+import net.marsh.spacecraft.util.ModBlockEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -17,15 +16,12 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.RecipeBookMenu;
-import net.minecraft.world.inventory.RecipeBookType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -36,7 +32,6 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.text.html.Option;
 import java.util.Map;
 import java.util.Optional;
 
@@ -60,7 +55,7 @@ public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvi
         }
     };
 
-    private final ModEnergyStorage ENERGY_STORAGE = new ModEnergyStorage(1000, 100) {
+    private final ModBlockEnergyStorage ENERGY_STORAGE = new ModBlockEnergyStorage(1000, 100) {
         @Override
         public void onEnergyChanged() {
             setChanged();
@@ -241,9 +236,7 @@ public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvi
             setChanged(level, pos, state);
         }
 
-        if (entity.ENERGY_STORAGE.getEnergyStored() == entity.ENERGY_STORAGE.getMaxEnergyStored()) {
-            ModMessages.sendToClients(new ElectricFurnaceEnergySyncS2CPacket(entity.ENERGY_STORAGE.getEnergyStored(), pos));
-        }
+        loadEnergyBar(entity, pos);
 
         if (entity.ENERGY_STORAGE.getEnergyStored() == 0) {
             entity.resetProgress();
@@ -256,6 +249,12 @@ public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvi
             setChanged(level, pos, state);
         }
 
+    }
+
+    private static void loadEnergyBar(ElectricFurnaceBlockEntity entity, BlockPos pos) {
+        if (entity.ENERGY_STORAGE.getEnergyStored() == entity.ENERGY_STORAGE.getMaxEnergyStored()) {
+            ModMessages.sendToClients(new ElectricFurnaceEnergySyncS2CPacket(entity.ENERGY_STORAGE.getEnergyStored(), pos));
+        }
     }
 
     private void resetProgress() {
@@ -281,19 +280,14 @@ public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvi
             inventory.setItem(i, entity.itemHandler.getStackInSlot(i));
         }
 
-        ItemStack inputStack = entity.itemHandler.getStackInSlot(1);
-        Optional<SmeltingRecipe> recipe = entity.level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SimpleContainer(inputStack), entity.level);
+        Optional<SmeltingRecipe> recipe = entity.level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SimpleContainer(entity.itemHandler.getStackInSlot(1)), entity.level);
 
-        return recipe.isPresent() && canInsertAmountIntoOutputSlot(inventory) &&
-                canInsertItemIntoOutputSlot(inventory, recipe.get().getResultItem());
+        return recipe.isPresent() && canInsertItemIntoOutputSlot(inventory, recipe.get().getResultItem());
     }
 
     private static boolean canInsertItemIntoOutputSlot(SimpleContainer inventory, ItemStack stack) {
-        return inventory.getItem(2).getItem() == stack.getItem() || inventory.getItem(2).isEmpty();
-    }
-
-    private static boolean canInsertAmountIntoOutputSlot(SimpleContainer inventory) {
-        return inventory.getItem(2).getMaxStackSize() > inventory.getItem(2).getCount();
+        return (inventory.getItem(2).getItem() == stack.getItem() || inventory.getItem(2).isEmpty())
+                && (inventory.getItem(2).getMaxStackSize() > inventory.getItem(2).getCount());
     }
 }
 

@@ -4,7 +4,7 @@ import net.marsh.spacecraft.block.custom.CoalGeneratorBlock;
 import net.marsh.spacecraft.networking.ModMessages;
 import net.marsh.spacecraft.networking.packet.CoalGeneratorEnergySyncS2CPacket;
 import net.marsh.spacecraft.screen.CoalGeneratorMenu;
-import net.marsh.spacecraft.util.ModEnergyStorage;
+import net.marsh.spacecraft.util.ModBlockEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -51,7 +51,7 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
         }
     };
 
-    private final ModEnergyStorage ENERGY_STORAGE = new ModEnergyStorage(2500, 100) {
+    private final ModBlockEnergyStorage ENERGY_STORAGE = new ModBlockEnergyStorage(2500, 100) {
         @Override
         public void onEnergyChanged() {
             setChanged();
@@ -238,9 +238,7 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
             }
         }
 
-        if (entity.ENERGY_STORAGE.getEnergyStored() == entity.ENERGY_STORAGE.getMaxEnergyStored()) {
-            ModMessages.sendToClients(new CoalGeneratorEnergySyncS2CPacket(entity.ENERGY_STORAGE.getEnergyStored(), pos));
-        }
+        loadEnergyBar(entity, pos);
 
         if (entity.burnTime == 0) {
             state.setValue(CoalGeneratorBlock.LIT, false);
@@ -248,5 +246,11 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
             setChanged(level, pos, state);
         }
 
+    }
+
+    private static void loadEnergyBar(CoalGeneratorBlockEntity entity, BlockPos pos) {
+        if (entity.ENERGY_STORAGE.getEnergyStored() == entity.ENERGY_STORAGE.getMaxEnergyStored()) {
+            ModMessages.sendToClients(new CoalGeneratorEnergySyncS2CPacket(entity.ENERGY_STORAGE.getEnergyStored(), pos));
+        }
     }
 }
