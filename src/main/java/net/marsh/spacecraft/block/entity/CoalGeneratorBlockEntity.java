@@ -130,8 +130,22 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if(cap == ForgeCapabilities.ENERGY && side == Direction.EAST) {
-            return lazyEnergyHandler.cast();
+        if (cap == ForgeCapabilities.ENERGY) {
+            BlockState blockState = getBlockState();
+            Direction facingDirection = blockState.getValue(CoalGeneratorBlock.FACING);
+
+            // Determine the direction based on the facing direction of the block
+            Direction energyDirection = switch (facingDirection) {
+                case NORTH -> Direction.WEST;
+                case SOUTH -> Direction.EAST;
+                case WEST -> Direction.SOUTH;
+                case EAST -> Direction.NORTH;
+                default -> Direction.EAST; // Default to EAST if facing direction is not recognized
+            };
+
+            if (side == energyDirection) {
+                return lazyEnergyHandler.cast();
+            }
         }
 
         if (cap == ForgeCapabilities.ITEM_HANDLER) {
@@ -223,6 +237,7 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
                 setChanged(level, pos, state);
             }
         }
+
         if (entity.ENERGY_STORAGE.getEnergyStored() == entity.ENERGY_STORAGE.getMaxEnergyStored()) {
             ModMessages.sendToClients(new CoalGeneratorEnergySyncS2CPacket(entity.ENERGY_STORAGE.getEnergyStored(), pos));
         }

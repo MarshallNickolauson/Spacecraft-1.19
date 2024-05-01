@@ -134,8 +134,22 @@ public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvi
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == ForgeCapabilities.ENERGY && side == Direction.NORTH) {
-            return lazyEnergyHandler.cast();
+        if (cap == ForgeCapabilities.ENERGY) {
+            BlockState blockState = getBlockState();
+            Direction facingDirection = blockState.getValue(CoalGeneratorBlock.FACING);
+
+            // Determine the direction based on the facing direction of the block
+            Direction energyDirection = switch (facingDirection) {
+                case NORTH -> Direction.EAST;
+                case SOUTH -> Direction.WEST;
+                case WEST -> Direction.NORTH;
+                case EAST -> Direction.SOUTH;
+                default -> Direction.EAST; // Default to EAST if facing direction is not recognized
+            };
+
+            if (side == energyDirection) {
+                return lazyEnergyHandler.cast();
+            }
         }
 
         if (cap == ForgeCapabilities.ITEM_HANDLER) {
@@ -215,6 +229,8 @@ public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvi
         if (hasRecipe(entity)) {
             entity.progress++;
             entity.ENERGY_STORAGE.extractEnergy(ENERGY_REQUIRED, false);
+            state.setValue(CoalGeneratorBlock.LIT, true);
+            level.setBlockAndUpdate(pos, state.setValue(CoalGeneratorBlock.LIT, true));
             setChanged(level, pos, state);
 
             if (entity.progress >= entity.maxProgress) {
@@ -231,6 +247,12 @@ public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvi
 
         if (entity.ENERGY_STORAGE.getEnergyStored() == 0) {
             entity.resetProgress();
+            setChanged(level, pos, state);
+        }
+
+        if (entity.progress == 0) {
+            state.setValue(CoalGeneratorBlock.LIT, false);
+            level.setBlockAndUpdate(pos, state.setValue(CoalGeneratorBlock.LIT, false));
             setChanged(level, pos, state);
         }
 
