@@ -2,13 +2,18 @@ package net.marsh.spacecraft.block.custom;
 
 import net.marsh.spacecraft.block.entity.CoalGeneratorBlockEntity;
 import net.marsh.spacecraft.block.entity.ModBlockEntities;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -22,6 +27,8 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class CoalGeneratorBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
@@ -51,6 +58,13 @@ public class CoalGeneratorBlock extends BaseEntityBlock {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
         pBuilder.add(FACING, LIT);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack pStack, @Nullable BlockGetter pLevel, List<Component> components, TooltipFlag pFlag) {
+        components.add(Component.literal("Generates energy by burning coal.").withStyle(ChatFormatting.WHITE));
+        components.add(Component.literal("Generates 25FE/tick").withStyle(ChatFormatting.GREEN));
+        super.appendHoverText(pStack, pLevel, components, pFlag);
     }
 
     /* BLOCK ENTITY BELOW */
