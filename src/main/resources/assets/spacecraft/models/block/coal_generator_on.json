@@ -7,8 +7,8 @@
     "down": "spacecraft:block/machine_side",
     "up": "spacecraft:block/machine",
     "north": "spacecraft:block/coal_generator_on",
-    "south": "spacecraft:block/machine_side",
-    "west": "spacecraft:block/machine_power_output",
+    "south": "spacecraft:block/machine_power_output",
+    "west": "spacecraft:block/machine_side",
     "east": "spacecraft:block/machine_side"
   }
 }

@@ -135,10 +135,10 @@ public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvi
 
             // Determine the direction based on the facing direction of the block
             Direction energyDirection = switch (facingDirection) {
-                case NORTH -> Direction.EAST;
-                case SOUTH -> Direction.WEST;
-                case WEST -> Direction.NORTH;
-                case EAST -> Direction.SOUTH;
+                case NORTH -> Direction.SOUTH;
+                case SOUTH -> Direction.NORTH;
+                case WEST -> Direction.EAST;
+                case EAST -> Direction.WEST;
                 default -> Direction.EAST; // Default to EAST if facing direction is not recognized
             };
 

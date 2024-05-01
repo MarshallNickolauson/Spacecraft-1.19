@@ -136,10 +136,10 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
 
             // Determine the direction based on the facing direction of the block
             Direction energyDirection = switch (facingDirection) {
-                case NORTH -> Direction.WEST;
-                case SOUTH -> Direction.EAST;
-                case WEST -> Direction.SOUTH;
-                case EAST -> Direction.NORTH;
+                case NORTH -> Direction.SOUTH;
+                case SOUTH -> Direction.NORTH;
+                case WEST -> Direction.EAST;
+                case EAST -> Direction.WEST;
                 default -> Direction.EAST; // Default to EAST if facing direction is not recognized
             };
 
