@@ -51,23 +51,6 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
         }
     };
 
-    private final ModBlockEnergyStorage ENERGY_STORAGE = new ModBlockEnergyStorage(2000, 100) {
-        @Override
-        public void onEnergyChanged() {
-            setChanged();
-            ModMessages.sendToClients(new CoalGeneratorEnergySyncS2CPacket(this.energy, getBlockPos()));
-        }
-
-        @Override
-        public int receiveEnergy(int maxReceive, boolean simulate) {
-            if (burnTime > 0) {
-                return super.receiveEnergy(maxReceive, simulate);
-            } else {
-                return 0;
-            }
-        }
-    };
-
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
     private final Map<Direction, LazyOptional<WrappedHandler>> directionWrappedHandlerMap =
             Map.of(
@@ -81,11 +64,17 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
 
     private LazyOptional<IEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
 
+    private final ModBlockEnergyStorage ENERGY_STORAGE;
+    private Direction facing;
+    private Direction energyOutputDirection;
     protected final ContainerData data;
     private int burnTime = 0;
 
     public CoalGeneratorBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.COAL_GENERATOR.get(), pos, state);
+        this.facing = state.getValue(CoalGeneratorBlock.FACING);
+        this.energyOutputDirection = state.getValue(CoalGeneratorBlock.ENERGY_OUTPUT_DIRECTION);
+
         this.data = new ContainerData() {
             @Override
             public int get(int index) {
@@ -105,6 +94,34 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
             @Override
             public int getCount() {
                 return 1;
+            }
+        };
+
+        this.ENERGY_STORAGE = new ModBlockEnergyStorage(2000, 100) {
+            private final Direction energyOutputDirection = state.getValue(CoalGeneratorBlock.ENERGY_OUTPUT_DIRECTION);
+
+            @Override
+            public void onEnergyChanged() {
+                setChanged();
+                ModMessages.sendToClients(new CoalGeneratorEnergySyncS2CPacket(this.energy, getBlockPos()));
+            }
+
+            @Override
+            public int receiveEnergy(int maxReceive, boolean simulate) {
+                if (burnTime > 0) {
+                    return super.receiveEnergy(maxReceive, simulate);
+                } else {
+                    return 0;
+                }
+            }
+
+            @Override
+            public int extractEnergy(int maxExtract, boolean simulate) {
+                if (CoalGeneratorBlockEntity.this.facing == CoalGeneratorBlockEntity.this.energyOutputDirection) {
+                    return super.extractEnergy(maxExtract, simulate);
+                } else {
+                    return 0;
+                }
             }
         };
     }

@@ -4,7 +4,7 @@
     "front": "spacecraft:block/electric_furnace_on",
     "side": "spacecraft:block/machine_side",
     "top": "spacecraft:block/machine",
-    "down": "spacecraft:block/machine_side",
+    "down": "spacecraft:block/machine",
     "up": "spacecraft:block/machine",
     "north": "spacecraft:block/electric_furnace_on",
     "south": "spacecraft:block/machine_power_input",

@@ -33,16 +33,27 @@ import java.util.List;
 public class CoalGeneratorBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty LIT = BooleanProperty.create("lit");
+    //public static final DirectionProperty ENERGY_INPUT = DirectionProperty.create("energy_input", Direction.values());
+    public static final DirectionProperty ENERGY_OUTPUT_DIRECTION = DirectionProperty.create("energy_output", Direction.values());
 
     public CoalGeneratorBlock(Properties pProperties) {
         super(pProperties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(LIT, false));
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(LIT, false)
+                //.setValue(ENERGY_INPUT, Direction.NORTH)
+                .setValue(ENERGY_OUTPUT_DIRECTION, Direction.NORTH)
+        );
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite());
+        Direction facing = pContext.getHorizontalDirection().getOpposite();
+        return this.defaultBlockState()
+                .setValue(FACING, facing)
+                .setValue(LIT, false)
+                //.setValue(ENERGY_INPUT, Direction.DOWN)
+                .setValue(ENERGY_OUTPUT_DIRECTION, facing);
     }
 
     @Override
@@ -57,7 +68,7 @@ public class CoalGeneratorBlock extends BaseEntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-        pBuilder.add(FACING, LIT);
+        pBuilder.add(FACING, LIT, /* ENERGY_INPUT, */ ENERGY_OUTPUT_DIRECTION);
     }
 
     @Override

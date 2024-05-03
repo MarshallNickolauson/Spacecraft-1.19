@@ -3,7 +3,7 @@
   "textures": {
     "front": "spacecraft:block/solar_panel_front",
     "side": "spacecraft:block/machine",
-    "top": "spacecraft:block/machine",
+    "top": "spacecraft:block/solar_panel_top",
     "down": "spacecraft:block/machine_power_output",
     "up": "spacecraft:block/solar_panel_top_on",
     "north": "spacecraft:block/solar_panel_front",
