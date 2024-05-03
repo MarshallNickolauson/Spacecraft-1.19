@@ -4,6 +4,7 @@ import net.marsh.spacecraft.block.entity.ModBlockEntities;
 import net.marsh.spacecraft.block.entity.SolarPanelBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -32,16 +33,26 @@ import java.util.List;
 public class SolarPanelBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty LIT = BooleanProperty.create("lit");
+    public static final DirectionProperty ENERGY_OUTPUT_DIRECTION_1 = DirectionProperty.create("energy_output_1", Direction.values());
+    public static final DirectionProperty ENERGY_OUTPUT_DIRECTION_2 = DirectionProperty.create("energy_output_2", Direction.values());
 
     public SolarPanelBlock(Properties pProperties) {
         super(pProperties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(LIT, false));
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(LIT, false)
+                .setValue(ENERGY_OUTPUT_DIRECTION_1, Direction.NORTH)
+                .setValue(ENERGY_OUTPUT_DIRECTION_1, Direction.NORTH)
+        );
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite());
+        Direction facing = pContext.getHorizontalDirection().getOpposite();
+        return this.defaultBlockState()
+                .setValue(FACING, facing)
+                .setValue(ENERGY_OUTPUT_DIRECTION_1, facing)
+                .setValue(ENERGY_OUTPUT_DIRECTION_2, Direction.DOWN);
     }
 
     @Override
@@ -56,7 +67,7 @@ public class SolarPanelBlock extends BaseEntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-        pBuilder.add(FACING, LIT);
+        pBuilder.add(FACING, LIT, ENERGY_OUTPUT_DIRECTION_1, ENERGY_OUTPUT_DIRECTION_2);
     }
 
     @Override

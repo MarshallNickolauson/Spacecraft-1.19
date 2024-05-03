@@ -56,15 +56,6 @@ public class ElectricArcFurnaceBlockEntity extends BlockEntity implements MenuPr
         }
     };
 
-    private final ModBlockEnergyStorage ENERGY_STORAGE = new ModBlockEnergyStorage(10000, 250) {
-        @Override
-        public void onEnergyChanged() {
-            setChanged();
-            ModMessages.sendToClients(new ElectricArcFurnaceEnergySyncS2CPacket(this.energy, getBlockPos()));
-        }
-    };
-    private static final int ENERGY_REQUIRED = 100;
-
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
     private final Map<Direction, LazyOptional<WrappedHandler>> directionWrappedHandlerMap =
             Map.of(
@@ -78,12 +69,19 @@ public class ElectricArcFurnaceBlockEntity extends BlockEntity implements MenuPr
 
     private LazyOptional<IEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
 
+    private ModBlockEnergyStorage ENERGY_STORAGE;
+    private static final int ENERGY_REQUIRED = 100;
+    private Direction facing;
+    private Direction energyInputDirection;
     protected final ContainerData data;
     private int progress = 0;
     private int maxProgress = 50;
 
-    public ElectricArcFurnaceBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(ModBlockEntities.ELECTRIC_ARC_FURNACE.get(), pPos, pBlockState);
+    public ElectricArcFurnaceBlockEntity(BlockPos pos, BlockState state) {
+        super(ModBlockEntities.ELECTRIC_ARC_FURNACE.get(), pos, state);
+        this.facing = state.getValue(ElectricArcFurnaceBlock.FACING);
+        this.energyInputDirection = state.getValue(ElectricArcFurnaceBlock.ENERGY_INPUT_DIRECTION);
+
         this.data = new ContainerData() {
             @Override
             public int get(int index) {
@@ -105,6 +103,37 @@ public class ElectricArcFurnaceBlockEntity extends BlockEntity implements MenuPr
             @Override
             public int getCount() {
                 return 2;
+            }
+        };
+
+        this.ENERGY_STORAGE = new ModBlockEnergyStorage(10000, 250) {
+
+            @Override
+            public void onEnergyChanged() {
+                setChanged();
+                ModMessages.sendToClients(new ElectricArcFurnaceEnergySyncS2CPacket(this.energy, getBlockPos()));
+            }
+
+            @Override
+            public int receiveEnergy(int maxReceive, boolean simulate) {
+                if (ElectricArcFurnaceBlockEntity.this.facing != ElectricArcFurnaceBlockEntity.this.energyInputDirection) {
+                    return 0;
+                }
+
+                return super.receiveEnergy(maxExtract, simulate);
+            }
+
+            @Override
+            public int extractEnergy(int maxExtract, boolean simulate) {
+                if (!hasRecipeInProgress()) {
+                    return 0;
+                }
+
+                return super.extractEnergy(maxExtract, simulate);
+            }
+
+            private boolean hasRecipeInProgress() {
+                return hasRecipe(ElectricArcFurnaceBlockEntity.this) && progress < maxProgress;
             }
         };
     }

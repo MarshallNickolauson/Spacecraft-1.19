@@ -5,6 +5,7 @@ import net.marsh.spacecraft.block.entity.ElectricFurnaceBlockEntity;
 import net.marsh.spacecraft.block.entity.ModBlockEntities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -33,16 +34,23 @@ import java.util.List;
 public class ElectricFurnaceBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty LIT = BooleanProperty.create("lit");
+    public static final DirectionProperty ENERGY_INPUT_DIRECTION = DirectionProperty.create("energy_input", Direction.values());
 
     public ElectricFurnaceBlock(Properties pProperties) {
         super(pProperties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(LIT, false));
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(LIT, false)
+                .setValue(ENERGY_INPUT_DIRECTION, Direction.NORTH)
+        );
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite());
+        Direction facing = pContext.getHorizontalDirection().getOpposite();
+        return this.defaultBlockState()
+                .setValue(FACING, facing)
+                .setValue(ENERGY_INPUT_DIRECTION, facing);
     }
 
     @Override
@@ -57,7 +65,7 @@ public class ElectricFurnaceBlock extends BaseEntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-        pBuilder.add(FACING, LIT);
+        pBuilder.add(FACING, LIT, ENERGY_INPUT_DIRECTION);
     }
 
     @Override

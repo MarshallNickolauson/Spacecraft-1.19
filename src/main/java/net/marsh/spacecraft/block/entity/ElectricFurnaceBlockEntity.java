@@ -1,5 +1,6 @@
 package net.marsh.spacecraft.block.entity;
 
+import net.marsh.spacecraft.block.custom.ElectricArcFurnaceBlock;
 import net.marsh.spacecraft.block.custom.ElectricFurnaceBlock;
 import net.marsh.spacecraft.networking.ModMessages;
 import net.marsh.spacecraft.networking.packet.ElectricFurnaceEnergySyncS2CPacket;
@@ -55,15 +56,6 @@ public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvi
         }
     };
 
-    private final ModBlockEnergyStorage ENERGY_STORAGE = new ModBlockEnergyStorage(1000, 100) {
-        @Override
-        public void onEnergyChanged() {
-            setChanged();
-            ModMessages.sendToClients(new ElectricFurnaceEnergySyncS2CPacket(this.energy, getBlockPos()));
-        }
-    };
-    private static final int ENERGY_REQUIRED = 10;
-
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
     private final Map<Direction, LazyOptional<WrappedHandler>> directionWrappedHandlerMap =
             Map.of(
@@ -77,12 +69,19 @@ public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvi
 
     private LazyOptional<IEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
 
+    private ModBlockEnergyStorage ENERGY_STORAGE;
+    private static final int ENERGY_REQUIRED = 10;
+    private Direction facing;
+    private Direction energyInputDirection;
     protected final ContainerData data;
     private int progress = 0;
     private int maxProgress = 100;
 
-    public ElectricFurnaceBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(ModBlockEntities.ELECTRIC_FURNACE.get(), pPos, pBlockState);
+    public ElectricFurnaceBlockEntity(BlockPos pos, BlockState state) {
+        super(ModBlockEntities.ELECTRIC_FURNACE.get(), pos, state);
+        this.facing = state.getValue(ElectricFurnaceBlock.FACING);
+        this.energyInputDirection = state.getValue(ElectricFurnaceBlock.ENERGY_INPUT_DIRECTION);
+
         this.data = new ContainerData() {
             @Override
             public int get(int index) {
@@ -105,6 +104,38 @@ public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvi
             public int getCount() {
                 return 2;
             }
+        };
+
+        this.ENERGY_STORAGE = new ModBlockEnergyStorage(1000, 100) {
+
+            @Override
+            public void onEnergyChanged() {
+                setChanged();
+                ModMessages.sendToClients(new ElectricFurnaceEnergySyncS2CPacket(this.energy, getBlockPos()));
+            }
+
+            @Override
+            public int receiveEnergy(int maxReceive, boolean simulate) {
+                if (ElectricFurnaceBlockEntity.this.facing != ElectricFurnaceBlockEntity.this.energyInputDirection) {
+                    return 0;
+                }
+
+                return super.receiveEnergy(maxExtract, simulate);
+            }
+
+            @Override
+            public int extractEnergy(int maxExtract, boolean simulate) {
+                if (!hasRecipeInProgress()) {
+                    return 0;
+                }
+
+                return super.extractEnergy(maxExtract, simulate);
+            }
+
+            private boolean hasRecipeInProgress() {
+                return hasRecipe(ElectricFurnaceBlockEntity.this) && progress < maxProgress;
+            }
+
         };
     }
 

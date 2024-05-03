@@ -1,5 +1,6 @@
 package net.marsh.spacecraft.block.entity;
 
+import net.marsh.spacecraft.block.custom.CoalGeneratorBlock;
 import net.marsh.spacecraft.block.custom.SolarPanelBlock;
 import net.marsh.spacecraft.networking.ModMessages;
 import net.marsh.spacecraft.networking.packet.SolarPanelEnergySyncS2CPacket;
@@ -50,31 +51,22 @@ public class SolarPanelBlockEntity extends BlockEntity implements MenuProvider {
         }
     };
 
-    private final ModBlockEnergyStorage ENERGY_STORAGE = new ModBlockEnergyStorage(2000, 31) {
-        @Override
-        public void onEnergyChanged() {
-            setChanged();
-            ModMessages.sendToClients(new SolarPanelEnergySyncS2CPacket(this.energy, getBlockPos()));
-        }
-
-        @Override
-        public int receiveEnergy(int maxReceive, boolean simulate) {
-            if (level.isDay()) {
-                return super.receiveEnergy(maxReceive, simulate);
-            } else {
-                return 0;
-            }
-        }
-    };
-
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
 
     private LazyOptional<IEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
 
+    private final ModBlockEnergyStorage ENERGY_STORAGE;
+    private Direction facing;
+    private Direction energyOutputDirection1;
+    private Direction energyOutputDirection2;
     protected final ContainerData data;
 
     public SolarPanelBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.SOLAR_PANEL.get(), pos, state);
+        this.facing = state.getValue(SolarPanelBlock.FACING);
+        this.energyOutputDirection1 = state.getValue(SolarPanelBlock.ENERGY_OUTPUT_DIRECTION_1);
+        this.energyOutputDirection2 = state.getValue(SolarPanelBlock.ENERGY_OUTPUT_DIRECTION_2);
+
         this.data = new ContainerData() {
             @Override
             public int get(int index) {
@@ -90,6 +82,31 @@ public class SolarPanelBlockEntity extends BlockEntity implements MenuProvider {
             @Override
             public int getCount() {
                 return 0;
+            }
+        };
+
+        this.ENERGY_STORAGE = new ModBlockEnergyStorage(2000, 31) {
+            @Override
+            public void onEnergyChanged() {
+                setChanged();
+                ModMessages.sendToClients(new SolarPanelEnergySyncS2CPacket(this.energy, getBlockPos()));
+            }
+
+            @Override
+            public int receiveEnergy(int maxReceive, boolean simulate) {
+                if (!level.isDay()) {
+                    return 0;
+                }
+                return super.receiveEnergy(maxReceive, simulate);
+            }
+
+            @Override
+            public int extractEnergy(int maxExtract, boolean simulate) {
+                if (SolarPanelBlockEntity.this.facing == SolarPanelBlockEntity.this.energyOutputDirection1 || SolarPanelBlockEntity.this.facing == SolarPanelBlockEntity.this.energyOutputDirection2) {
+                    return super.extractEnergy(maxExtract, simulate);
+                } else {
+                    return 0;
+                }
             }
         };
     }
