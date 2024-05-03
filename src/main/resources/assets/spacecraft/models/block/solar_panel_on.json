@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "spacecraft:block/solar_panel_front",
+    "side": "spacecraft:block/machine",
+    "top": "spacecraft:block/machine",
+    "down": "spacecraft:block/machine_power_output",
+    "up": "spacecraft:block/solar_panel_top_on",
+    "north": "spacecraft:block/solar_panel_front",
+    "south": "spacecraft:block/machine_power_output",
+    "west": "spacecraft:block/machine",
+    "east": "spacecraft:block/machine"
+  }
+}
