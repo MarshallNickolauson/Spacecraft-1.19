@@ -1,9 +1,7 @@
 package net.marsh.spacecraft.networking.packet;
 
-import net.marsh.spacecraft.block.entity.CoalGeneratorBlockEntity;
 import net.marsh.spacecraft.block.entity.ElectricFurnaceBlockEntity;
-import net.marsh.spacecraft.screen.CoalGeneratorMenu;
-import net.marsh.spacecraft.screen.ElectricFurnaceMenu;
+import net.marsh.spacecraft.render.menu.ElectricFurnaceMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;

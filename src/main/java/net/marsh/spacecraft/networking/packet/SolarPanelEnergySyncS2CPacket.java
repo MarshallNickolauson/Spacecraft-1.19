@@ -1,7 +1,7 @@
 package net.marsh.spacecraft.networking.packet;
 
 import net.marsh.spacecraft.block.entity.SolarPanelBlockEntity;
-import net.marsh.spacecraft.screen.SolarPanelMenu;
+import net.marsh.spacecraft.render.menu.SolarPanelMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;

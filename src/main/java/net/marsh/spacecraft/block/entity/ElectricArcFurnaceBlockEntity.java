@@ -1,9 +1,11 @@
 package net.marsh.spacecraft.block.entity;
 
+import net.marsh.spacecraft.block.ModBlockEntities;
+import net.marsh.spacecraft.block.WrappedHandler;
 import net.marsh.spacecraft.block.custom.ElectricArcFurnaceBlock;
 import net.marsh.spacecraft.networking.ModMessages;
 import net.marsh.spacecraft.networking.packet.ElectricArcFurnaceEnergySyncS2CPacket;
-import net.marsh.spacecraft.screen.ElectricArcFurnaceMenu;
+import net.marsh.spacecraft.render.menu.ElectricArcFurnaceMenu;
 import net.marsh.spacecraft.util.ModBlockEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

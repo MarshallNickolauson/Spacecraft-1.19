@@ -1,7 +1,7 @@
 package net.marsh.spacecraft.block.custom;
 
 import net.marsh.spacecraft.block.entity.CoalGeneratorBlockEntity;
-import net.marsh.spacecraft.block.entity.ModBlockEntities;
+import net.marsh.spacecraft.block.ModBlockEntities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

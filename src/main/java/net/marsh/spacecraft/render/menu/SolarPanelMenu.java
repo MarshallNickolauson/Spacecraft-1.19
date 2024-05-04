@@ -1,7 +1,8 @@
-package net.marsh.spacecraft.screen;
+package net.marsh.spacecraft.render.menu;
 
 import net.marsh.spacecraft.block.ModBlocks;
 import net.marsh.spacecraft.block.entity.SolarPanelBlockEntity;
+import net.marsh.spacecraft.render.ModMenuTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;

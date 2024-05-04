@@ -1,7 +1,10 @@
-package net.marsh.spacecraft.block.entity;
+package net.marsh.spacecraft.block;
 
 import net.marsh.spacecraft.Spacecraft;
-import net.marsh.spacecraft.block.ModBlocks;
+import net.marsh.spacecraft.block.entity.CoalGeneratorBlockEntity;
+import net.marsh.spacecraft.block.entity.ElectricArcFurnaceBlockEntity;
+import net.marsh.spacecraft.block.entity.ElectricFurnaceBlockEntity;
+import net.marsh.spacecraft.block.entity.SolarPanelBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;

@@ -1,9 +1,10 @@
-package net.marsh.spacecraft.screen;
+package net.marsh.spacecraft.render.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.marsh.spacecraft.Spacecraft;
-import net.marsh.spacecraft.screen.renderer.EnergyInfoArea;
+import net.marsh.spacecraft.render.area.EnergyInfoArea;
+import net.marsh.spacecraft.render.menu.SolarPanelMenu;
 import net.marsh.spacecraft.util.MouseUtil;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;

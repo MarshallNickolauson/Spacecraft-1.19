@@ -2,10 +2,14 @@ package net.marsh.spacecraft;
 
 import com.mojang.logging.LogUtils;
 import net.marsh.spacecraft.block.ModBlocks;
-import net.marsh.spacecraft.block.entity.ModBlockEntities;
+import net.marsh.spacecraft.block.ModBlockEntities;
 import net.marsh.spacecraft.networking.ModMessages;
-import net.marsh.spacecraft.screen.*;
+import net.marsh.spacecraft.render.*;
 import net.marsh.spacecraft.item.ModItems;
+import net.marsh.spacecraft.render.screen.CoalGeneratorScreen;
+import net.marsh.spacecraft.render.screen.ElectricArcFurnaceScreen;
+import net.marsh.spacecraft.render.screen.ElectricFurnaceScreen;
+import net.marsh.spacecraft.render.screen.SolarPanelScreen;
 import net.marsh.spacecraft.world.feature.ModConfiguredFeatures;
 import net.marsh.spacecraft.world.feature.ModPlacedFeatures;
 import net.minecraft.client.gui.screens.MenuScreens;

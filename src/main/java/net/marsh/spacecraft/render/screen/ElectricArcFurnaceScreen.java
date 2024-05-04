@@ -1,9 +1,10 @@
-package net.marsh.spacecraft.screen;
+package net.marsh.spacecraft.render.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.marsh.spacecraft.Spacecraft;
-import net.marsh.spacecraft.screen.renderer.EnergyInfoArea;
+import net.marsh.spacecraft.render.area.EnergyInfoArea;
+import net.marsh.spacecraft.render.menu.ElectricArcFurnaceMenu;
 import net.marsh.spacecraft.util.MouseUtil;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -13,12 +14,12 @@ import net.minecraft.world.entity.player.Inventory;
 
 import java.util.Optional;
 
-public class ElectricFurnaceScreen extends AbstractContainerScreen<ElectricFurnaceMenu> {
+public class ElectricArcFurnaceScreen extends AbstractContainerScreen<ElectricArcFurnaceMenu> {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(Spacecraft.MOD_ID, "textures/gui/electric_furnace_screen.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(Spacecraft.MOD_ID, "textures/gui/electric_arc_furnace_screen.png");
     private EnergyInfoArea energyInfoArea;
 
-    public ElectricFurnaceScreen(ElectricFurnaceMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
+    public ElectricArcFurnaceScreen(ElectricArcFurnaceMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
     }
 
@@ -64,7 +65,7 @@ public class ElectricFurnaceScreen extends AbstractContainerScreen<ElectricFurna
 
     private void renderProgressArrow(PoseStack pPoseStack, int x, int y) {
         if(menu.isCrafting()) {
-            blit(pPoseStack, x + 74, y + 34, 176, 0, menu.getScaledProgress(), 16);
+            blit(pPoseStack, x + 68, y + 35, 176, 0, menu.getScaledProgress(), 16);
         }
     }
 

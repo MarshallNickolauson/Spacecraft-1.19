@@ -1,10 +1,10 @@
 package net.marsh.spacecraft.block.entity;
 
-import net.marsh.spacecraft.block.custom.CoalGeneratorBlock;
+import net.marsh.spacecraft.block.ModBlockEntities;
 import net.marsh.spacecraft.block.custom.SolarPanelBlock;
 import net.marsh.spacecraft.networking.ModMessages;
 import net.marsh.spacecraft.networking.packet.SolarPanelEnergySyncS2CPacket;
-import net.marsh.spacecraft.screen.SolarPanelMenu;
+import net.marsh.spacecraft.render.menu.SolarPanelMenu;
 import net.marsh.spacecraft.util.ModBlockEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -30,8 +30,6 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Map;
 
 public class SolarPanelBlockEntity extends BlockEntity implements MenuProvider {
 

@@ -1,6 +1,10 @@
-package net.marsh.spacecraft.screen;
+package net.marsh.spacecraft.render;
 
 import net.marsh.spacecraft.Spacecraft;
+import net.marsh.spacecraft.render.menu.CoalGeneratorMenu;
+import net.marsh.spacecraft.render.menu.ElectricArcFurnaceMenu;
+import net.marsh.spacecraft.render.menu.ElectricFurnaceMenu;
+import net.marsh.spacecraft.render.menu.SolarPanelMenu;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;

@@ -1,4 +1,4 @@
-package net.marsh.spacecraft.block.entity;
+package net.marsh.spacecraft.block;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;

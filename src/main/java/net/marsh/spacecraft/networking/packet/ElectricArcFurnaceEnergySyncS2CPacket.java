@@ -1,7 +1,7 @@
 package net.marsh.spacecraft.networking.packet;
 
 import net.marsh.spacecraft.block.entity.ElectricArcFurnaceBlockEntity;
-import net.marsh.spacecraft.screen.ElectricArcFurnaceMenu;
+import net.marsh.spacecraft.render.menu.ElectricArcFurnaceMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;

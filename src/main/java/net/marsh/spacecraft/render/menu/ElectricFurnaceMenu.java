@@ -1,7 +1,8 @@
-package net.marsh.spacecraft.screen;
+package net.marsh.spacecraft.render.menu;
 
 import net.marsh.spacecraft.block.ModBlocks;
-import net.marsh.spacecraft.block.entity.ElectricArcFurnaceBlockEntity;
+import net.marsh.spacecraft.block.entity.ElectricFurnaceBlockEntity;
+import net.marsh.spacecraft.render.ModMenuTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -12,19 +13,19 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.SlotItemHandler;
 
-public class ElectricArcFurnaceMenu extends AbstractContainerMenu {
-    public final ElectricArcFurnaceBlockEntity blockEntity;
+public class ElectricFurnaceMenu extends AbstractContainerMenu {
+    public final ElectricFurnaceBlockEntity blockEntity;
     private final Level level;
     private final ContainerData data;
 
-    public ElectricArcFurnaceMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
+    public ElectricFurnaceMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
         this(id, inv, inv.player.level.getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2)); //simpleContainerData matches the amount of data (progress and maxProgress = 2)
     }
 
-    public ElectricArcFurnaceMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {
-        super(ModMenuTypes.ELECTRIC_ARC_FURNACE_MENU.get(), id);
-        checkContainerSize(inv, 4);
-        blockEntity = (ElectricArcFurnaceBlockEntity) entity;
+    public ElectricFurnaceMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {
+        super(ModMenuTypes.ELECTRIC_FURNACE_MENU.get(), id);
+        checkContainerSize(inv, 3);
+        blockEntity = (ElectricFurnaceBlockEntity) entity;
         this.level = inv.player.level;
         this.data = data;
 
@@ -33,9 +34,8 @@ public class ElectricArcFurnaceMenu extends AbstractContainerMenu {
 
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
             this.addSlot(new SlotItemHandler(handler, 0, 8, 62));
-            this.addSlot(new SlotItemHandler(handler, 1, 44, 35));
-            this.addSlot(new SlotItemHandler(handler, 2, 108, 35));
-            this.addSlot(new SlotItemHandler(handler, 3, 134, 35));
+            this.addSlot(new SlotItemHandler(handler, 1, 52, 35));
+            this.addSlot(new SlotItemHandler(handler, 2, 113, 35));
         });
 
         addDataSlots(data);
@@ -45,7 +45,7 @@ public class ElectricArcFurnaceMenu extends AbstractContainerMenu {
         return data.get(0) > 0;
     }
 
-    public ElectricArcFurnaceBlockEntity getBlockEntity() {
+    public ElectricFurnaceBlockEntity getBlockEntity() {
         return this.blockEntity;
     }
 
@@ -74,7 +74,7 @@ public class ElectricArcFurnaceMenu extends AbstractContainerMenu {
     private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
 
     // THIS YOU HAVE TO DEFINE!
-    private static final int TE_INVENTORY_SLOT_COUNT = 4;  // must be the number of slots you have!
+    private static final int TE_INVENTORY_SLOT_COUNT = 3;  // must be the number of slots you have!
 
     @Override
     public ItemStack quickMoveStack(Player playerIn, int index) {
@@ -112,7 +112,7 @@ public class ElectricArcFurnaceMenu extends AbstractContainerMenu {
     @Override
     public boolean stillValid(Player player) {
         return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()),
-                player, ModBlocks.ELECTRIC_ARC_FURNACE.get());
+                player, ModBlocks.ELECTRIC_FURNACE.get());
     }
 
     private void addPlayerInventory(Inventory playerInventory) {

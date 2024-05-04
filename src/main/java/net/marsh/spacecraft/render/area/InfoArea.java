@@ -1,4 +1,4 @@
-package net.marsh.spacecraft.screen.renderer;
+package net.marsh.spacecraft.render.area;
 
 
 import com.mojang.blaze3d.vertex.PoseStack;
