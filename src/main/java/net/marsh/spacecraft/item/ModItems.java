@@ -1,6 +1,7 @@
 package net.marsh.spacecraft.item;
 
 import net.marsh.spacecraft.Spacecraft;
+import net.marsh.spacecraft.item.custom.BatteryItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -40,7 +41,7 @@ public class ModItems {
     public static final RegistryObject<Item> COMPRESSED_TITANIUM = ITEMS.register("compressed_titanium", () -> new Item(new Item.Properties().tab(ModCreativeModTab.SPACECRAFT_TAB)));
     public static final RegistryObject<Item> COMPRESSED_LEAD = ITEMS.register("compressed_lead", () -> new Item(new Item.Properties().tab(ModCreativeModTab.SPACECRAFT_TAB)));
 
-
+    public static final RegistryObject<Item> BATTERY = ITEMS.register("battery", () -> new BatteryItem(new Item.Properties().tab(ModCreativeModTab.SPACECRAFT_TAB), 10000, 100));
 
     public static void register(IEventBus eventBus) { ITEMS.register(eventBus); }
 }

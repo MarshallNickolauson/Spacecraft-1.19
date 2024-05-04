@@ -3,10 +3,13 @@ package net.marsh.spacecraft.block.entity;
 import net.marsh.spacecraft.block.ModBlockEntities;
 import net.marsh.spacecraft.block.WrappedHandler;
 import net.marsh.spacecraft.block.custom.CoalGeneratorBlock;
+import net.marsh.spacecraft.item.ModItems;
+import net.marsh.spacecraft.item.custom.BatteryItem;
 import net.marsh.spacecraft.networking.ModMessages;
 import net.marsh.spacecraft.networking.packet.CoalGeneratorEnergySyncS2CPacket;
 import net.marsh.spacecraft.render.menu.CoalGeneratorMenu;
 import net.marsh.spacecraft.util.ModBlockEnergyStorage;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -46,8 +49,7 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
             return switch (slot) {
                 case 0 -> stack.getItem() == Items.COAL;
-                //TODO change case 1 to a battery type later on. Make abstract class
-                case 1 -> stack.getItem() == Items.DIAMOND;
+                case 1 -> stack.getItem() == ModItems.BATTERY.get();
                 default -> super.isItemValid(slot, stack);
             };
         }
@@ -67,8 +69,8 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
     private LazyOptional<IEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
 
     private final ModBlockEnergyStorage ENERGY_STORAGE;
-    private Direction facing;
-    private Direction energyOutputDirection;
+    private final Direction facing;
+    private final Direction energyOutputDirection;
     protected final ContainerData data;
     private int burnTime = 0;
 
@@ -117,14 +119,14 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
                 }
             }
 
-            @Override
-            public int extractEnergy(int maxExtract, boolean simulate) {
-                if (CoalGeneratorBlockEntity.this.facing == CoalGeneratorBlockEntity.this.energyOutputDirection) {
-                    return super.extractEnergy(maxExtract, simulate);
-                } else {
-                    return 0;
-                }
-            }
+//            @Override
+//            public int extractEnergy(int maxExtract, boolean simulate) {
+//                if (CoalGeneratorBlockEntity.this.facing == CoalGeneratorBlockEntity.this.energyOutputDirection) {
+//                    return super.extractEnergy(maxExtract, simulate);
+//                } else {
+//                    return 0;
+//                }
+//            }
         };
     }
 
@@ -241,9 +243,24 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
             inventory.setItem(i, entity.itemHandler.getStackInSlot(i));
         }
 
+        ItemStack batteryStack = entity.itemHandler.getStackInSlot(1);
+        if (!batteryStack.isEmpty() && batteryStack.getItem() instanceof BatteryItem batteryItem) {
+            CompoundTag batteryTag = batteryStack.getOrCreateTag();
+            int currentEnergy = batteryTag.getInt("battery_energy_amount");
+
+            System.out.println(currentEnergy);
+
+            if (currentEnergy < batteryItem.getMaxEnergyStored() && entity.ENERGY_STORAGE.getEnergyStored() > 0) {
+                batteryTag.putInt("battery_energy_amount", currentEnergy + 25);
+
+                entity.ENERGY_STORAGE.extractEnergy(25, false);
+            }
+
+        }
+
         if (inventory.getItem(0).getItem() == Items.COAL && entity.burnTime == 0) {
             inventory.getItem(0).setCount((inventory.getItem(0).getCount()) - 1);
-            entity.burnTime = 1600; // Resets burn time
+            entity.burnTime = 1600;
         }
 
         if (entity.burnTime > 0) {
