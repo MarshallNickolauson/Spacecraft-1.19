@@ -53,41 +53,15 @@ public class CircuitFabricatorMenu extends AbstractContainerMenu {
     }
 
     public boolean hasDiamondAndSilicon() {
-//        Slot 36diamond
-//        Slot 37diamond
-//        Slot 38raw_silicon
-//        Slot 39raw_silicon
-//        Slot 40redstone
-//        Slot 41redstone_torch
-//        Slot 42air
-
-        ItemStack slot1Stack = this.slots.get(37).getItem();
-        ItemStack slot2Stack = this.slots.get(38).getItem();
-        ItemStack slot3Stack = this.slots.get(39).getItem();
-
-        boolean hasDiamond = !slot1Stack.isEmpty() && slot1Stack.getItem() == Items.DIAMOND;
-        boolean hasSilicon = !slot2Stack.isEmpty() && slot2Stack.getItem() == ModItems.RAW_SILICON.get() &&
-                !slot3Stack.isEmpty() && slot3Stack.getItem() == ModItems.RAW_SILICON.get();
-
-        return hasDiamond && hasSilicon;
+        return !this.slots.get(37).getItem().isEmpty() && !this.slots.get(38).getItem().isEmpty();
     }
 
     public boolean hasRedstoneDust() {
-        if (hasDiamondAndSilicon()) {
-            ItemStack slotStack = this.slots.get(40).getItem();
-            return !slotStack.isEmpty() && slotStack.getItem() == Items.REDSTONE;
-        }
-
-        return false;
+        return hasDiamondAndSilicon() && !this.slots.get(39).getItem().isEmpty() && !this.slots.get(40).getItem().isEmpty();
     }
 
     public boolean hasRedstoneTorch() {
-        if (hasRedstoneDust()) {
-            ItemStack slotStack = this.slots.get(41).getItem();
-            return !slotStack.isEmpty() && slotStack.getItem() == Items.REDSTONE_TORCH;
-        }
-
-        return false;
+        return hasRedstoneDust() && !this.slots.get(41).getItem().isEmpty();
     }
 
     public boolean hasEnergy() {
