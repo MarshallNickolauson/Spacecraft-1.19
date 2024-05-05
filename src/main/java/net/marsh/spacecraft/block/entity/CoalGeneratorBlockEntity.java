@@ -248,7 +248,7 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
             CompoundTag batteryTag = batteryStack.getOrCreateTag();
             int currentEnergy = batteryTag.getInt("battery_energy_amount");
 
-            System.out.println(currentEnergy);
+            //System.out.println(currentEnergy);
 
             if (currentEnergy < batteryItem.getMaxEnergyStored() && entity.ENERGY_STORAGE.getEnergyStored() > 0) {
                 batteryTag.putInt("battery_energy_amount", currentEnergy + 25);

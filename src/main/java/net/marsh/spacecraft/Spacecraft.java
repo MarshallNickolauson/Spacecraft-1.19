@@ -6,10 +6,8 @@ import net.marsh.spacecraft.block.ModBlockEntities;
 import net.marsh.spacecraft.networking.ModMessages;
 import net.marsh.spacecraft.render.*;
 import net.marsh.spacecraft.item.ModItems;
-import net.marsh.spacecraft.render.screen.CoalGeneratorScreen;
-import net.marsh.spacecraft.render.screen.ElectricArcFurnaceScreen;
-import net.marsh.spacecraft.render.screen.ElectricFurnaceScreen;
-import net.marsh.spacecraft.render.screen.SolarPanelScreen;
+import net.marsh.spacecraft.render.menu.CircuitFabricatorMenu;
+import net.marsh.spacecraft.render.screen.*;
 import net.marsh.spacecraft.world.feature.ModConfiguredFeatures;
 import net.marsh.spacecraft.world.feature.ModPlacedFeatures;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -54,6 +52,7 @@ public class Spacecraft {
             MenuScreens.register(ModMenuTypes.ELECTRIC_FURNACE_MENU.get(), ElectricFurnaceScreen::new);
             MenuScreens.register(ModMenuTypes.ELECTRIC_ARC_FURNACE_MENU.get(), ElectricArcFurnaceScreen::new);
             MenuScreens.register(ModMenuTypes.SOLAR_PANEL_MENU.get(), SolarPanelScreen::new);
+            MenuScreens.register(ModMenuTypes.CIRCUIT_FABRICATOR_MENU.get(), CircuitFabricatorScreen::new);
         }
     }
 }

@@ -31,6 +31,9 @@
   "item.spacecraft.compressed_titanium": "Compressed Titanium",
   "item.spacecraft.compressed_lead": "Compressed Lead",
 
+  "item.spacecraft.basic_wafer": "Basic Wafer",
+  "item.spacecraft.advanced_wafer": "Advanced Wafer",
+
   "block.spacecraft.deepslate_aluminum_ore": "Deepslate Aluminum Ore",
   "block.spacecraft.deepslate_lead_ore": "Deepslate Lead Ore",
   "block.spacecraft.deepslate_meteoric_iron_ore": "Deepslate Meteoric Iron Ore",
@@ -53,6 +56,8 @@
   "block.spacecraft.electric_furnace": "Electric Furnace",
   "block.spacecraft.electric_arc_furnace": "Electric Arc Furnace",
   "block.spacecraft.solar_panel": "Solar Panel",
+
+  "block.spacecraft.circuit_fabricator": "Circuit Fabricator",
 
   "item.spacecraft.battery": "Battery",
   "tooltip.spacecraft.energy_remaining": "Energy Remaining: %s"

@@ -1,10 +1,7 @@
 package net.marsh.spacecraft.block;
 
 import net.marsh.spacecraft.Spacecraft;
-import net.marsh.spacecraft.block.entity.CoalGeneratorBlockEntity;
-import net.marsh.spacecraft.block.entity.ElectricArcFurnaceBlockEntity;
-import net.marsh.spacecraft.block.entity.ElectricFurnaceBlockEntity;
-import net.marsh.spacecraft.block.entity.SolarPanelBlockEntity;
+import net.marsh.spacecraft.block.entity.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -18,6 +15,7 @@ public class ModBlockEntities {
     public static final RegistryObject<BlockEntityType<ElectricFurnaceBlockEntity>> ELECTRIC_FURNACE = BLOCK_ENTITIES.register("electric_furnace", () -> BlockEntityType.Builder.of(ElectricFurnaceBlockEntity::new, ModBlocks.ELECTRIC_FURNACE.get()).build(null));
     public static final RegistryObject<BlockEntityType<ElectricArcFurnaceBlockEntity>> ELECTRIC_ARC_FURNACE = BLOCK_ENTITIES.register("electric_arc_furnace", () -> BlockEntityType.Builder.of(ElectricArcFurnaceBlockEntity::new, ModBlocks.ELECTRIC_ARC_FURNACE.get()).build(null));
     public static final RegistryObject<BlockEntityType<SolarPanelBlockEntity>> SOLAR_PANEL = BLOCK_ENTITIES.register("solar_panel", () -> BlockEntityType.Builder.of(SolarPanelBlockEntity::new, ModBlocks.SOLAR_PANEL.get()).build(null));
+    public static final RegistryObject<BlockEntityType<CircuitFabricatorBlockEntity>> CIRCUIT_FABRICATOR = BLOCK_ENTITIES.register("circuit_fabricator", () -> BlockEntityType.Builder.of(CircuitFabricatorBlockEntity::new, ModBlocks.CIRCUIT_FABRICATOR.get()).build(null));
 
     public static void register(IEventBus eventBus) { BLOCK_ENTITIES.register(eventBus); }
 }

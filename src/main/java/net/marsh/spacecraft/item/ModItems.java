@@ -42,6 +42,8 @@ public class ModItems {
     public static final RegistryObject<Item> COMPRESSED_LEAD = ITEMS.register("compressed_lead", () -> new Item(new Item.Properties().tab(ModCreativeModTab.SPACECRAFT_TAB)));
 
     public static final RegistryObject<Item> BATTERY = ITEMS.register("battery", () -> new BatteryItem(new Item.Properties().tab(ModCreativeModTab.SPACECRAFT_TAB), 10000, 100));
+    public static final RegistryObject<Item> BASIC_WAFER = ITEMS.register("basic_wafer", () -> new Item(new Item.Properties().tab(ModCreativeModTab.SPACECRAFT_TAB)));
+    public static final RegistryObject<Item> ADVANCED_WAFER = ITEMS.register("advanced_wafer", () -> new Item(new Item.Properties().tab(ModCreativeModTab.SPACECRAFT_TAB)));
 
     public static void register(IEventBus eventBus) { ITEMS.register(eventBus); }
 }

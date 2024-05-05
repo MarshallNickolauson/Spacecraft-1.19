@@ -1,10 +1,7 @@
 package net.marsh.spacecraft.networking;
 
 import net.marsh.spacecraft.Spacecraft;
-import net.marsh.spacecraft.networking.packet.CoalGeneratorEnergySyncS2CPacket;
-import net.marsh.spacecraft.networking.packet.ElectricArcFurnaceEnergySyncS2CPacket;
-import net.marsh.spacecraft.networking.packet.ElectricFurnaceEnergySyncS2CPacket;
-import net.marsh.spacecraft.networking.packet.SolarPanelEnergySyncS2CPacket;
+import net.marsh.spacecraft.networking.packet.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -52,6 +49,12 @@ public class ModMessages {
                 .decoder(SolarPanelEnergySyncS2CPacket::new)
                 .encoder(SolarPanelEnergySyncS2CPacket::toBytes)
                 .consumerMainThread(SolarPanelEnergySyncS2CPacket::handle)
+                .add();
+
+        net.messageBuilder(CircuitFabricatorEnergySyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(CircuitFabricatorEnergySyncS2CPacket::new)
+                .encoder(CircuitFabricatorEnergySyncS2CPacket::toBytes)
+                .consumerMainThread(CircuitFabricatorEnergySyncS2CPacket::handle)
                 .add();
     }
 
