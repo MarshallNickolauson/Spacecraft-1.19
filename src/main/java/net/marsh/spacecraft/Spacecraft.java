@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import net.marsh.spacecraft.block.ModBlocks;
 import net.marsh.spacecraft.block.ModBlockEntities;
 import net.marsh.spacecraft.networking.ModMessages;
+import net.marsh.spacecraft.recipe.ModRecipes;
 import net.marsh.spacecraft.render.*;
 import net.marsh.spacecraft.item.ModItems;
 import net.marsh.spacecraft.render.menu.CircuitFabricatorMenu;
@@ -35,6 +36,7 @@ public class Spacecraft {
         ModPlacedFeatures.register(modEventBus);
         ModBlockEntities.register(modEventBus);
         ModMenuTypes.register(modEventBus);
+        ModRecipes.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
@@ -53,6 +55,7 @@ public class Spacecraft {
             MenuScreens.register(ModMenuTypes.ELECTRIC_ARC_FURNACE_MENU.get(), ElectricArcFurnaceScreen::new);
             MenuScreens.register(ModMenuTypes.SOLAR_PANEL_MENU.get(), SolarPanelScreen::new);
             MenuScreens.register(ModMenuTypes.CIRCUIT_FABRICATOR_MENU.get(), CircuitFabricatorScreen::new);
+            MenuScreens.register(ModMenuTypes.ELECTRIC_COMPRESSOR_MENU.get(), ElectricCompressorScreen::new);
         }
     }
 }

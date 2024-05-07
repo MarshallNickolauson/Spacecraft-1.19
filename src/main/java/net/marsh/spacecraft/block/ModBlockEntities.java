@@ -16,6 +16,7 @@ public class ModBlockEntities {
     public static final RegistryObject<BlockEntityType<ElectricArcFurnaceBlockEntity>> ELECTRIC_ARC_FURNACE = BLOCK_ENTITIES.register("electric_arc_furnace", () -> BlockEntityType.Builder.of(ElectricArcFurnaceBlockEntity::new, ModBlocks.ELECTRIC_ARC_FURNACE.get()).build(null));
     public static final RegistryObject<BlockEntityType<SolarPanelBlockEntity>> SOLAR_PANEL = BLOCK_ENTITIES.register("solar_panel", () -> BlockEntityType.Builder.of(SolarPanelBlockEntity::new, ModBlocks.SOLAR_PANEL.get()).build(null));
     public static final RegistryObject<BlockEntityType<CircuitFabricatorBlockEntity>> CIRCUIT_FABRICATOR = BLOCK_ENTITIES.register("circuit_fabricator", () -> BlockEntityType.Builder.of(CircuitFabricatorBlockEntity::new, ModBlocks.CIRCUIT_FABRICATOR.get()).build(null));
+    public static final RegistryObject<BlockEntityType<ElectricCompressorBlockEntity>> ELECTRIC_COMPRESSOR = BLOCK_ENTITIES.register("electric_compressor", () -> BlockEntityType.Builder.of(ElectricCompressorBlockEntity::new, ModBlocks.ELECTRIC_COMPRESSOR.get()).build(null));
 
     public static void register(IEventBus eventBus) { BLOCK_ENTITIES.register(eventBus); }
 }

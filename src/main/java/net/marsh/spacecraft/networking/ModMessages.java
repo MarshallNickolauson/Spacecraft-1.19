@@ -56,6 +56,12 @@ public class ModMessages {
                 .encoder(CircuitFabricatorEnergySyncS2CPacket::toBytes)
                 .consumerMainThread(CircuitFabricatorEnergySyncS2CPacket::handle)
                 .add();
+
+        net.messageBuilder(ElectricCompressorEnergySyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ElectricCompressorEnergySyncS2CPacket::new)
+                .encoder(ElectricCompressorEnergySyncS2CPacket::toBytes)
+                .consumerMainThread(ElectricCompressorEnergySyncS2CPacket::handle)
+                .add();
     }
 
     public static <MSG> void sendToServer(MSG message) {

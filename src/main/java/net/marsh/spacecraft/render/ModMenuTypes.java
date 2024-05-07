@@ -19,6 +19,7 @@ public class ModMenuTypes {
     public static final RegistryObject<MenuType<ElectricArcFurnaceMenu>> ELECTRIC_ARC_FURNACE_MENU = registerMenuType(ElectricArcFurnaceMenu::new, "electric_arc_furnace_menu");
     public static final RegistryObject<MenuType<SolarPanelMenu>> SOLAR_PANEL_MENU = registerMenuType(SolarPanelMenu::new, "solar_panel_menu");
     public static final RegistryObject<MenuType<CircuitFabricatorMenu>> CIRCUIT_FABRICATOR_MENU = registerMenuType(CircuitFabricatorMenu::new, "circuit_fabricator_menu");
+    public static final RegistryObject<MenuType<ElectricCompressorMenu>> ELECTRIC_COMPRESSOR_MENU = registerMenuType(ElectricCompressorMenu::new, "electric_compressor_menu");
 
     private static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> registerMenuType(IContainerFactory<T> factory, String name) {
         return MENUS.register(name, () -> IForgeMenuType.create(factory));

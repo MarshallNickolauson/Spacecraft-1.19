@@ -1,0 +1,19 @@
+{
+  "type": "spacecraft:electric_compressing",
+  "key": {
+    "I": {
+      "item": "spacecraft:compressed_aluminum"
+    },
+    "C": {
+      "item": "spacecraft:compressed_copper"
+    }
+  },
+  "pattern":[
+    "  ",
+    " IC",
+    " CI"
+  ],
+  "result": {
+    "item": "spacecraft:compressed_bronze"
+  }
+}
