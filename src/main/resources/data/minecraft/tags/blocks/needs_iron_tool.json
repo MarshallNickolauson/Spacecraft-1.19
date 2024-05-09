@@ -16,6 +16,13 @@
     "spacecraft:silicon_ore",
     "spacecraft:tin_ore",
     "spacecraft:titanium_ore",
-    "spacecraft:uranium_ore"
+    "spacecraft:uranium_ore",
+    "spacecraft:coal_generator",
+    "spacecraft:electric_furnace",
+    "spacecraft:electric_arc_furnace",
+    "spacecraft:solar_panel",
+    "spacecraft:circuit_fabricator",
+    "spacecraft:electric_compressor",
+    "spacecraft:steel_foundry"
   ]
 }
