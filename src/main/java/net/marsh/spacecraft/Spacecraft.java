@@ -56,6 +56,7 @@ public class Spacecraft {
             MenuScreens.register(ModMenuTypes.SOLAR_PANEL_MENU.get(), SolarPanelScreen::new);
             MenuScreens.register(ModMenuTypes.CIRCUIT_FABRICATOR_MENU.get(), CircuitFabricatorScreen::new);
             MenuScreens.register(ModMenuTypes.ELECTRIC_COMPRESSOR_MENU.get(), ElectricCompressorScreen::new);
+            MenuScreens.register(ModMenuTypes.STEEL_FOUNDRY_MENU.get(), SteelFoundryScreen::new);
         }
     }
 }

@@ -291,8 +291,7 @@ public class CircuitFabricatorBlockEntity extends BlockEntity implements MenuPro
         }
 
         return (
-                (inventory.getItem(1).getItem() == Items.DIAMOND)
-                && (inventory.getItem(2).getItem() == ModItems.RAW_SILICON.get())
+                (inventory.getItem(2).getItem() == ModItems.RAW_SILICON.get())
                 && (inventory.getItem(3).getItem() == ModItems.RAW_SILICON.get())
                 && (inventory.getItem(4).getItem() == Items.REDSTONE)
                 && (inventory.getItem(5).getItem() == Items.REDSTONE_TORCH)

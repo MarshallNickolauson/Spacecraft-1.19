@@ -48,6 +48,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> SOLAR_PANEL = registerBlock("solar_panel", () -> new SolarPanelBlock(BlockBehaviour.Properties.of(Material.METAL).strength(3f).noOcclusion()), ModCreativeModTab.SPACECRAFT_TAB);
     public static final RegistryObject<Block> CIRCUIT_FABRICATOR = registerBlock("circuit_fabricator", () -> new CircuitFabricatorBlock(BlockBehaviour.Properties.of(Material.METAL).strength(3f).noOcclusion().lightLevel(state -> state.getValue(CircuitFabricatorBlock.LIT) ? 5 : 0)), ModCreativeModTab.SPACECRAFT_TAB);
     public static final RegistryObject<Block> ELECTRIC_COMPRESSOR = registerBlock("electric_compressor", () -> new ElectricCompressorBlock(BlockBehaviour.Properties.of(Material.METAL).strength(3f).noOcclusion().lightLevel(state -> state.getValue(ElectricCompressorBlock.LIT) ? 5 : 0)), ModCreativeModTab.SPACECRAFT_TAB);
+    public static final RegistryObject<Block> STEEL_FOUNDRY = registerBlock("steel_foundry", () -> new SteelFoundryBlock(BlockBehaviour.Properties.of(Material.METAL).strength(3f).noOcclusion().lightLevel(state -> state.getValue(SteelFoundryBlock.LIT) ? 5 : 0)), ModCreativeModTab.SPACECRAFT_TAB);
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block, CreativeModeTab tab) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);

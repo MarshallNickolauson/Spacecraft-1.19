@@ -62,6 +62,12 @@ public class ModMessages {
                 .encoder(ElectricCompressorEnergySyncS2CPacket::toBytes)
                 .consumerMainThread(ElectricCompressorEnergySyncS2CPacket::handle)
                 .add();
+
+        net.messageBuilder(SteelFoundryEnergySyncS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(SteelFoundryEnergySyncS2CPacket::new)
+                .encoder(SteelFoundryEnergySyncS2CPacket::toBytes)
+                .consumerMainThread(SteelFoundryEnergySyncS2CPacket::handle)
+                .add();
     }
 
     public static <MSG> void sendToServer(MSG message) {
