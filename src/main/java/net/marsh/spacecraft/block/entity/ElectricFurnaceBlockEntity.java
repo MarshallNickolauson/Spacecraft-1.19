@@ -37,6 +37,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.Optional;
 
+@SuppressWarnings("ALL")
 public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvider {
 
     private final ItemStackHandler itemHandler = new ItemStackHandler(3) {

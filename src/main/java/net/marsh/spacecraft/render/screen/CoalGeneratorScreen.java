@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 import java.util.Optional;
 
+@SuppressWarnings("ALL")
 public class CoalGeneratorScreen extends AbstractContainerScreen<CoalGeneratorMenu> {
 
     private static final ResourceLocation TEXTURE = new ResourceLocation(Spacecraft.MOD_ID, "textures/gui/coal_generator_screen.png");

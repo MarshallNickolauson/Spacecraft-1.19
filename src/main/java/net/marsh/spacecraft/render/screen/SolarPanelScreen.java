@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 import java.util.Optional;
 
+@SuppressWarnings("ALL")
 public class SolarPanelScreen extends AbstractContainerScreen<SolarPanelMenu> {
 
     private static final ResourceLocation TEXTURE = new ResourceLocation(Spacecraft.MOD_ID, "textures/gui/solar_panel_screen.png");

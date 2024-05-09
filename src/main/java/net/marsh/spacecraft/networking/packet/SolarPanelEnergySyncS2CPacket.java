@@ -9,6 +9,7 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
+@SuppressWarnings("ALL")
 public class SolarPanelEnergySyncS2CPacket {
     private final int energy;
     private final BlockPos pos;

@@ -10,6 +10,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.List;
 
+@SuppressWarnings("ALL")
 public class ModPlacedFeatures {
     public static final DeferredRegister<PlacedFeature> PLACED_FEATURES = DeferredRegister.create(Registry.PLACED_FEATURE_REGISTRY, Spacecraft.MOD_ID);
 

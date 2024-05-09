@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.SlotItemHandler;
 
+@SuppressWarnings("ALL")
 public class SolarPanelMenu extends AbstractContainerMenu {
     public final SolarPanelBlockEntity blockEntity;
     private final Level level;

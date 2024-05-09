@@ -1,7 +1,6 @@
 package net.marsh.spacecraft.block.entity;
 
 import net.marsh.spacecraft.block.ModBlockEntities;
-import net.marsh.spacecraft.block.WrappedHandler;
 import net.marsh.spacecraft.block.custom.ElectricCompressorBlock;
 import net.marsh.spacecraft.networking.ModMessages;
 import net.marsh.spacecraft.networking.packet.ElectricCompressorEnergySyncS2CPacket;
@@ -23,8 +22,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -37,9 +34,9 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
 import java.util.Optional;
 
+@SuppressWarnings("ALL")
 public class ElectricCompressorBlockEntity extends BlockEntity implements MenuProvider {
 
     private final ItemStackHandler itemHandler = new ItemStackHandler(12) {

@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 import java.util.Optional;
 
+@SuppressWarnings("ALL")
 public class CircuitFabricatorScreen extends AbstractContainerScreen<CircuitFabricatorMenu> {
 
     private static final ResourceLocation TEXTURE = new ResourceLocation(Spacecraft.MOD_ID, "textures/gui/circuit_fabricator_screen.png");

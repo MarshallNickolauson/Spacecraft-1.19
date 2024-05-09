@@ -2,20 +2,18 @@ package net.marsh.spacecraft.render.menu;
 
 import net.marsh.spacecraft.block.ModBlocks;
 import net.marsh.spacecraft.block.entity.CircuitFabricatorBlockEntity;
-import net.marsh.spacecraft.item.ModItems;
 import net.marsh.spacecraft.render.ModMenuTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.SlotItemHandler;
 
+@SuppressWarnings("ALL")
 public class CircuitFabricatorMenu extends AbstractContainerMenu {
     public final CircuitFabricatorBlockEntity blockEntity;
     private final Level level;

@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 import java.util.Optional;
 
+@SuppressWarnings("ALL")
 public class SteelFoundryScreen extends AbstractContainerScreen<SteelFoundryMenu> {
 
     private static final ResourceLocation TEXTURE = new ResourceLocation(Spacecraft.MOD_ID, "textures/gui/steel_foundry_screen.png");

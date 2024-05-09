@@ -15,6 +15,7 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.List;
 import java.util.function.Supplier;
 
+@SuppressWarnings("ALL")
 public class ModConfiguredFeatures {
     public static final DeferredRegister<ConfiguredFeature<?, ?>> CONFIGURED_FEATURES = DeferredRegister.create(Registry.CONFIGURED_FEATURE_REGISTRY, Spacecraft.MOD_ID);
 

@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 import java.util.Optional;
 
+@SuppressWarnings("ALL")
 public class ElectricArcFurnaceScreen extends AbstractContainerScreen<ElectricArcFurnaceMenu> {
 
     private static final ResourceLocation TEXTURE = new ResourceLocation(Spacecraft.MOD_ID, "textures/gui/electric_arc_furnace_screen.png");

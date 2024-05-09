@@ -8,6 +8,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = Spacecraft.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@SuppressWarnings("ALL")
 public class DataGenerators {
     @SubscribeEvent
     public static void gatherData(GatherDataEvent event) {

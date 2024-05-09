@@ -12,6 +12,7 @@ import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
 import java.util.List;
 import java.util.function.Consumer;
 
+@SuppressWarnings("ALL")
 public class ModRecipeProvider extends RecipeProvider implements IConditionBuilder {
 
     public ModRecipeProvider(DataGenerator generator) {

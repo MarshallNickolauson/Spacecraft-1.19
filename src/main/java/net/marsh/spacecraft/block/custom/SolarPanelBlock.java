@@ -30,6 +30,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+@SuppressWarnings("ALL")
 public class SolarPanelBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty LIT = BooleanProperty.create("lit");

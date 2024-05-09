@@ -36,6 +36,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
+@SuppressWarnings("ALL")
 public class CircuitFabricatorBlockEntity extends BlockEntity implements MenuProvider {
 
     private final ItemStackHandler itemHandler = new ItemStackHandler(7) {

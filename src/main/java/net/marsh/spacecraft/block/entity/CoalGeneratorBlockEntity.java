@@ -9,7 +9,6 @@ import net.marsh.spacecraft.networking.ModMessages;
 import net.marsh.spacecraft.networking.packet.CoalGeneratorEnergySyncS2CPacket;
 import net.marsh.spacecraft.render.menu.CoalGeneratorMenu;
 import net.marsh.spacecraft.util.ModBlockEnergyStorage;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -37,6 +36,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
+@SuppressWarnings("ALL")
 public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvider {
 
     private final ItemStackHandler itemHandler = new ItemStackHandler(2) {

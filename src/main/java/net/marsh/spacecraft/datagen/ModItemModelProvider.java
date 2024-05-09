@@ -10,6 +10,7 @@ import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 
+@SuppressWarnings("ALL")
 public class ModItemModelProvider extends ItemModelProvider {
 
     public ModItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {

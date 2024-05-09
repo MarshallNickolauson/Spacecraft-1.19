@@ -1,9 +1,7 @@
 package net.marsh.spacecraft.networking.packet;
 
 import net.marsh.spacecraft.block.entity.CircuitFabricatorBlockEntity;
-import net.marsh.spacecraft.block.entity.ElectricFurnaceBlockEntity;
 import net.marsh.spacecraft.render.menu.CircuitFabricatorMenu;
-import net.marsh.spacecraft.render.menu.ElectricFurnaceMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -11,6 +9,7 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
+@SuppressWarnings("ALL")
 public class CircuitFabricatorEnergySyncS2CPacket {
     private final int energy;
     private final BlockPos pos;

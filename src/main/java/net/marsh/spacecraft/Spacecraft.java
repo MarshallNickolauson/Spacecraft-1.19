@@ -1,13 +1,12 @@
 package net.marsh.spacecraft;
 
 import com.mojang.logging.LogUtils;
-import net.marsh.spacecraft.block.ModBlocks;
 import net.marsh.spacecraft.block.ModBlockEntities;
+import net.marsh.spacecraft.block.ModBlocks;
+import net.marsh.spacecraft.item.ModItems;
 import net.marsh.spacecraft.networking.ModMessages;
 import net.marsh.spacecraft.recipe.ModRecipes;
-import net.marsh.spacecraft.render.*;
-import net.marsh.spacecraft.item.ModItems;
-import net.marsh.spacecraft.render.menu.CircuitFabricatorMenu;
+import net.marsh.spacecraft.render.ModMenuTypes;
 import net.marsh.spacecraft.render.screen.*;
 import net.marsh.spacecraft.world.feature.ModConfiguredFeatures;
 import net.marsh.spacecraft.world.feature.ModPlacedFeatures;
@@ -22,6 +21,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
 @Mod(Spacecraft.MOD_ID)
+@SuppressWarnings("ALL")
 public class Spacecraft {
     public static final String MOD_ID = "spacecraft";
     private static final Logger LOGGER = LogUtils.getLogger();

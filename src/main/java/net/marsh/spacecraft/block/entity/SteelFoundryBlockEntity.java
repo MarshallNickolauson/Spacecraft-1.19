@@ -35,6 +35,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
+@SuppressWarnings("ALL")
 public class SteelFoundryBlockEntity extends BlockEntity implements MenuProvider {
 
     private final ItemStackHandler itemHandler = new ItemStackHandler(4) {

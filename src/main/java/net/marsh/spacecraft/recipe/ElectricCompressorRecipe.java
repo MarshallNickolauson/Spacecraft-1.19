@@ -17,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("ALL")
 public class ElectricCompressorRecipe implements Recipe<SimpleContainer> {
 
     private final ResourceLocation id;

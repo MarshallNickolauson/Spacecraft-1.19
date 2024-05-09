@@ -1,9 +1,7 @@
 package net.marsh.spacecraft.networking.packet;
 
 import net.marsh.spacecraft.block.entity.ElectricCompressorBlockEntity;
-import net.marsh.spacecraft.block.entity.ElectricFurnaceBlockEntity;
 import net.marsh.spacecraft.render.menu.ElectricCompressorMenu;
-import net.marsh.spacecraft.render.menu.ElectricFurnaceMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -11,6 +9,7 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
+@SuppressWarnings("ALL")
 public class ElectricCompressorEnergySyncS2CPacket {
     private final int energy;
     private final BlockPos pos;

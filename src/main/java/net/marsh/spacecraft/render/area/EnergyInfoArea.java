@@ -14,6 +14,8 @@ import java.util.List;
  *  This code is licensed under "Blu's License of Common Sense"
  *  Details can be found in the license file in the root folder of this project
  */
+
+@SuppressWarnings("ALL")
 public class EnergyInfoArea extends InfoArea {
     private final IEnergyStorage energy;
 

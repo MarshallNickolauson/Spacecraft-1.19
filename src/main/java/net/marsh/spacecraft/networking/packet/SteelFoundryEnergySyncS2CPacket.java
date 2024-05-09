@@ -1,8 +1,6 @@
 package net.marsh.spacecraft.networking.packet;
 
-import net.marsh.spacecraft.block.entity.ElectricFurnaceBlockEntity;
 import net.marsh.spacecraft.block.entity.SteelFoundryBlockEntity;
-import net.marsh.spacecraft.render.menu.ElectricFurnaceMenu;
 import net.marsh.spacecraft.render.menu.SteelFoundryMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -11,6 +9,7 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
+@SuppressWarnings("ALL")
 public class SteelFoundryEnergySyncS2CPacket {
     private final int energy;
     private final BlockPos pos;

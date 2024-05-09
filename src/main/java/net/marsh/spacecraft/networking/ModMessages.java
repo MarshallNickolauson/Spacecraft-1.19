@@ -9,6 +9,7 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
+@SuppressWarnings("ALL")
 public class ModMessages {
     private static SimpleChannel INSTANCE;
 
