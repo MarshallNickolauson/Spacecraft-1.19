@@ -7,11 +7,13 @@ import net.marsh.spacecraft.item.ModItems;
 import net.marsh.spacecraft.networking.ModMessages;
 import net.marsh.spacecraft.networking.packet.SteelFoundryEnergySyncS2CPacket;
 import net.marsh.spacecraft.render.menu.SteelFoundryMenu;
+import net.marsh.spacecraft.sound.ModSounds;
 import net.marsh.spacecraft.util.ModBlockEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
@@ -79,6 +81,7 @@ public class SteelFoundryBlockEntity extends BlockEntity implements MenuProvider
     private int maxCraftingProgress = 100;
     private int diodeChargeProgress = 0;
     private int maxDiodeCharge = 100;
+    private boolean isSoundOn = false;
 
     public SteelFoundryBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.STEEL_FOUNDRY.get(), pos, state);
@@ -260,12 +263,23 @@ public class SteelFoundryBlockEntity extends BlockEntity implements MenuProvider
 
         if (entity.ENERGY_STORAGE.getEnergyStored() > 0 && entity.diodeChargeProgress < entity.maxDiodeCharge) {
             entity.diodeChargeProgress++;
-            level.setBlockAndUpdate(pos, state.setValue(SteelFoundryBlock.LIT, true));
             setChanged(level, pos, state);
         }
 
+        //TODO needs to be a flag to only turn it on once. Make global variable
+
         if(entity.diodeChargeProgress > 0) {
             entity.ENERGY_STORAGE.extractEnergy(ENERGY_REQUIRED, false);
+            setChanged(level, pos, state);
+            if(!entity.isSoundOn) {
+                level.playSound(null, pos, ModSounds.STEEL_FOUNDRY_SOUND.get(), SoundSource.RECORDS, 0.5f, 1.0f);
+                level.setBlockAndUpdate(pos, state.setValue(SteelFoundryBlock.LIT, true));
+                entity.isSoundOn = true;
+            }
+        } else {
+            level.setBlockAndUpdate(pos, state.setValue(SteelFoundryBlock.LIT, false));
+            level.playSound(null, pos, null, SoundSource.RECORDS, 0.0f, 0.0f);
+            entity.isSoundOn = false;
             setChanged(level, pos, state);
         }
 
@@ -279,7 +293,6 @@ public class SteelFoundryBlockEntity extends BlockEntity implements MenuProvider
                 }
             } else {
                 entity.resetCraftingProgress();
-                level.setBlockAndUpdate(pos, state.setValue(SteelFoundryBlock.LIT, false));
                 setChanged(level, pos, state);
             }
         }
@@ -287,6 +300,7 @@ public class SteelFoundryBlockEntity extends BlockEntity implements MenuProvider
         loadEnergyBar(entity, pos);
 
         if (entity.ENERGY_STORAGE.getEnergyStored() == 0) {
+            level.playSound(null, pos, null, SoundSource.BLOCKS, 0.0f, 0.0f);
             entity.resetCraftingProgress();
             entity.resetChargingProgress();
             setChanged(level, pos, state);
@@ -335,18 +349,3 @@ public class SteelFoundryBlockEntity extends BlockEntity implements MenuProvider
                 && (inventory.getItem(3).getMaxStackSize() > inventory.getItem(3).getCount());
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

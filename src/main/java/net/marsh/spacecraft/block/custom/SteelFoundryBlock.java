@@ -2,11 +2,13 @@ package net.marsh.spacecraft.block.custom;
 
 import net.marsh.spacecraft.block.ModBlockEntities;
 import net.marsh.spacecraft.block.entity.SteelFoundryBlockEntity;
+import net.marsh.spacecraft.sound.ModSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -88,6 +90,7 @@ public class SteelFoundryBlock extends BaseEntityBlock {
             BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
             if (blockEntity instanceof SteelFoundryBlockEntity) {
                 ((SteelFoundryBlockEntity) blockEntity).drops();
+                pLevel.playSound(null, pPos, null, SoundSource.RECORDS, 0.0f, 0.0f);
             }
         }
         super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);

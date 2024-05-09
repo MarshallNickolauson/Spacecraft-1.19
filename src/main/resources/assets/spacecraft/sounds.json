@@ -1,0 +1,8 @@
+{
+  "steel_foundry_sound": {
+    "subtitle": "sounds.spacecraft.steel_foundry_sound",
+    "sounds": [
+      "spacecraft:steel_foundry_sound"
+    ]
+  }
+}
