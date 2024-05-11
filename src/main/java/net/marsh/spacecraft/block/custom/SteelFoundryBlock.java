@@ -6,9 +6,12 @@ import net.marsh.spacecraft.sound.ModSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -120,5 +123,26 @@ public class SteelFoundryBlock extends BaseEntityBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         return createTickerHelper(type, ModBlockEntities.STEEL_FOUNDRY.get(), SteelFoundryBlockEntity::tick);
+    }
+
+    @Override
+    public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, RandomSource pRandom) {
+        if ((Boolean) pState.getValue(LIT)) {
+            double xPos = (double)pPos.getX() + 0.5;
+            double yPos = (double)pPos.getY();
+            double zPos = (double)pPos.getZ() + 0.5;
+            if (pRandom.nextDouble() < 0.1) {
+                pLevel.playLocalSound(xPos, yPos, zPos, ModSounds.STEEL_FOUNDRY_SOUND.get(), SoundSource.BLOCKS, 0.4F, 1.0F, false);
+            }
+
+            Direction facing = (Direction)pState.getValue(FACING);
+            Direction.Axis $$8 = facing.getAxis();
+            double randomFloat = pRandom.nextDouble() * 0.6 - 0.3;
+            double xAxis = $$8 == Direction.Axis.X ? (double)facing.getStepX() * 0.52 : randomFloat;
+            double yAxis = pRandom.nextDouble() * 6.0 / 16.0;
+            double zAxis = $$8 == Direction.Axis.Z ? (double)facing.getStepZ() * 0.52 : randomFloat;
+            pLevel.addParticle(ParticleTypes.SMOKE, xPos + xAxis, yPos + yAxis, zPos + zAxis, 0.0, 0.0, 0.0);
+            pLevel.addParticle(ParticleTypes.LAVA, xPos + xAxis, yPos + yAxis, zPos + zAxis, 0.0, 0.0, 0.0);
+        }
     }
 }

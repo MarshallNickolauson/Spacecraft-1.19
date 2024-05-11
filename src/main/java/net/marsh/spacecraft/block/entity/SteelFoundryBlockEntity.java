@@ -272,13 +272,11 @@ public class SteelFoundryBlockEntity extends BlockEntity implements MenuProvider
             entity.ENERGY_STORAGE.extractEnergy(ENERGY_REQUIRED, false);
             setChanged(level, pos, state);
             if(!entity.isSoundOn) {
-                level.playSound(null, pos, ModSounds.STEEL_FOUNDRY_SOUND.get(), SoundSource.RECORDS, 0.5f, 1.0f);
                 level.setBlockAndUpdate(pos, state.setValue(SteelFoundryBlock.LIT, true));
                 entity.isSoundOn = true;
             }
         } else {
             level.setBlockAndUpdate(pos, state.setValue(SteelFoundryBlock.LIT, false));
-            level.playSound(null, pos, null, SoundSource.RECORDS, 0.0f, 0.0f);
             entity.isSoundOn = false;
             setChanged(level, pos, state);
         }
@@ -300,7 +298,6 @@ public class SteelFoundryBlockEntity extends BlockEntity implements MenuProvider
         loadEnergyBar(entity, pos);
 
         if (entity.ENERGY_STORAGE.getEnergyStored() == 0) {
-            level.playSound(null, pos, null, SoundSource.BLOCKS, 0.0f, 0.0f);
             entity.resetCraftingProgress();
             entity.resetChargingProgress();
             setChanged(level, pos, state);
