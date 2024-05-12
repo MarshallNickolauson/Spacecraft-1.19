@@ -228,7 +228,8 @@ public class SteelFoundryBlockEntity extends BlockEntity implements MenuProvider
     @Override
     protected void saveAdditional(CompoundTag nbt) {
         nbt.put("inventory", itemHandler.serializeNBT());
-        nbt.putInt("steel_foundry_progress", this.craftingProgress);
+        nbt.putInt("steel_foundry_crafting_progress", this.craftingProgress);
+        nbt.putInt("steel_foundry_diode_progress", this.diodeChargeProgress);
         nbt.putInt("steel_foundry.energy", ENERGY_STORAGE.getEnergyStored());
 
         super.saveAdditional(nbt);
@@ -238,7 +239,8 @@ public class SteelFoundryBlockEntity extends BlockEntity implements MenuProvider
     public void load(CompoundTag nbt) {
         super.load(nbt);
         itemHandler.deserializeNBT(nbt.getCompound("inventory"));
-        craftingProgress = nbt.getInt("steel_foundry_progress");
+        craftingProgress = nbt.getInt("steel_foundry_crafting_progress");
+        diodeChargeProgress = nbt.getInt("steel_foundry_diode_progress");
         ENERGY_STORAGE.setEnergy(nbt.getInt("steel_foundry.energy"));
     }
 
@@ -265,8 +267,6 @@ public class SteelFoundryBlockEntity extends BlockEntity implements MenuProvider
             entity.diodeChargeProgress++;
             setChanged(level, pos, state);
         }
-
-        //TODO needs to be a flag to only turn it on once. Make global variable
 
         if(entity.diodeChargeProgress > 0) {
             entity.ENERGY_STORAGE.extractEnergy(ENERGY_REQUIRED, false);
