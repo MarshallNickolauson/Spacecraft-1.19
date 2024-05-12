@@ -1,6 +1,8 @@
 package net.marsh.spacecraft.block.entity;
 
 import net.marsh.spacecraft.block.ModBlockEntities;
+import net.marsh.spacecraft.block.NewWrappedHandler;
+import net.marsh.spacecraft.block.WrappedHandler;
 import net.marsh.spacecraft.block.custom.SteelFoundryBlock;
 import net.marsh.spacecraft.item.ModItems;
 import net.marsh.spacecraft.networking.ModMessages;
@@ -27,18 +29,9 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SteelFoundryBlockEntity extends AbstractMachineBlockEntity {
+import java.util.Map;
 
-//
-//    private final Map<Direction, LazyOptional<WrappedHandler>> directionWrappedHandlerMap =
-//            Map.of(
-//                    Direction.UP, LazyOptional.of(() -> new WrappedHandler(itemStackHandler, (index) -> index == 1, (index, stack) -> itemStackHandler.isItemValid(1, stack))),
-//                    Direction.DOWN, LazyOptional.of(() -> new WrappedHandler(itemStackHandler, (i) -> i == 2, (i, s) -> false)),
-//                    Direction.NORTH, LazyOptional.of(() -> new WrappedHandler(itemStackHandler, (index) -> index == 1, (index, stack) -> itemStackHandler.isItemValid(1, stack))),
-//                    Direction.SOUTH, LazyOptional.of(() -> new WrappedHandler(itemStackHandler, (i) -> i == 2, (i, s) -> false)),
-//                    Direction.WEST, LazyOptional.of(() -> new WrappedHandler(itemStackHandler, (i) -> i == 2, (i, s) -> false)),
-//                    Direction.EAST, LazyOptional.of(() -> new WrappedHandler(itemStackHandler, (index) -> index == 1, (index, stack) -> itemStackHandler.isItemValid(1, stack)))
-//            );
+public class SteelFoundryBlockEntity extends AbstractMachineBlockEntity {
 
     private static final int ENERGY_REQUIRED = 51;
     private final Direction facing;
@@ -53,7 +46,6 @@ public class SteelFoundryBlockEntity extends AbstractMachineBlockEntity {
         this.facing = state.getValue(SteelFoundryBlock.FACING);
         this.energyInputDirection = state.getValue(SteelFoundryBlock.ENERGY_INPUT_DIRECTION);
     }
-
 
     @Override
     protected ContainerData createContainerData() {
@@ -108,6 +100,21 @@ public class SteelFoundryBlockEntity extends AbstractMachineBlockEntity {
     }
 
     @Override
+    protected int[] getSlotsForUp() {
+        return new int[]{1, 2};
+    }
+
+    @Override
+    protected int[] getSlotsForDown() {
+        return new int[]{3};
+    }
+
+    @Override
+    protected int[] getSlotsForSides() {
+        return new int[]{1, 2};
+    }
+
+    @Override
     protected ModBlockEnergyStorage createEnergyStorage() {
         return new ModBlockEnergyStorage(3000, 250) {
             @Override
@@ -127,51 +134,6 @@ public class SteelFoundryBlockEntity extends AbstractMachineBlockEntity {
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new SteelFoundryMenu(id, inventory, this, this.data);
-    }
-
-    @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == ForgeCapabilities.ENERGY) {
-            BlockState blockState = getBlockState();
-            Direction facingDirection = blockState.getValue(SteelFoundryBlock.FACING);
-
-            Direction energyDirection = switch (facingDirection) {
-                case NORTH -> Direction.SOUTH;
-                case SOUTH -> Direction.NORTH;
-                case WEST -> Direction.EAST;
-                case EAST -> Direction.WEST;
-                default -> Direction.EAST; // Default to EAST if facing direction is not recognized
-            };
-
-            if (side == energyDirection) {
-                return lazyEnergyHandler.cast();
-            }
-        }
-
-        if (cap == ForgeCapabilities.ITEM_HANDLER) {
-            return lazyItemHandler.cast();
-
-//            if (side == null) {
-//                return lazyItemHandler.cast();
-//            }
-//
-//            if (directionWrappedHandlerMap.containsKey(side)) {
-//                Direction localDir = this.getBlockState().getValue(SteelFoundryBlock.FACING);
-//
-//                if (side == Direction.UP || side == Direction.DOWN) {
-//                    return directionWrappedHandlerMap.get(side).cast();
-//                }
-//
-//                return switch (localDir) {
-//                    default -> directionWrappedHandlerMap.get(side.getOpposite()).cast();
-//                    case EAST -> directionWrappedHandlerMap.get(side.getClockWise()).cast();
-//                    case SOUTH -> directionWrappedHandlerMap.get(side).cast();
-//                    case WEST -> directionWrappedHandlerMap.get(side.getCounterClockWise()).cast();
-//                };
-//            }
-        }
-
-        return super.getCapability(cap, side);
     }
 
     @Override

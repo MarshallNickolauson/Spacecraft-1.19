@@ -16,15 +16,10 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
@@ -51,7 +46,6 @@ public class CoalGeneratorBlock extends AbstractMachineBlock {
                 .setValue(FACING, facing)
                 .setValue(ENERGY_FLOW_DIRECTION, facing)
                 .setValue(ENERGY_CONNECTION_TYPE, WireConnectionType.ENERGY_OUTPUT);
-
     }
 
     @Override
@@ -62,6 +56,7 @@ public class CoalGeneratorBlock extends AbstractMachineBlock {
     }
 
     /* BLOCK ENTITY BELOW */
+    //TODO this may be able to all be abstract
 
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
@@ -80,15 +75,18 @@ public class CoalGeneratorBlock extends AbstractMachineBlock {
         return InteractionResult.sidedSuccess(pLevel.isClientSide());
     }
 
+
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        //TODO can this be abstract too?
         return new CoalGeneratorBlockEntity(pos, state);
     }
 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        //TODO make this method abstract to override
         return createTickerHelper(type, ModBlockEntities.COAL_GENERATOR.get(), CoalGeneratorBlockEntity::tick);
     }
 }
