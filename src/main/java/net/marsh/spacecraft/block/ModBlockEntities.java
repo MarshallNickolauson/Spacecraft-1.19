@@ -19,6 +19,7 @@ public class ModBlockEntities {
     public static final RegistryObject<BlockEntityType<CircuitFabricatorBlockEntity>> CIRCUIT_FABRICATOR = BLOCK_ENTITIES.register("circuit_fabricator", () -> BlockEntityType.Builder.of(CircuitFabricatorBlockEntity::new, ModBlocks.CIRCUIT_FABRICATOR.get()).build(null));
     public static final RegistryObject<BlockEntityType<ElectricCompressorBlockEntity>> ELECTRIC_COMPRESSOR = BLOCK_ENTITIES.register("electric_compressor", () -> BlockEntityType.Builder.of(ElectricCompressorBlockEntity::new, ModBlocks.ELECTRIC_COMPRESSOR.get()).build(null));
     public static final RegistryObject<BlockEntityType<SteelFoundryBlockEntity>> STEEL_FOUNDRY = BLOCK_ENTITIES.register("steel_foundry", () -> BlockEntityType.Builder.of(SteelFoundryBlockEntity::new, ModBlocks.STEEL_FOUNDRY.get()).build(null));
+    public static final RegistryObject<BlockEntityType<WireBlockEntity>> WIRE_BLOCK = BLOCK_ENTITIES.register("wire_block", () -> BlockEntityType.Builder.of(WireBlockEntity::new, ModBlocks.WIRE_BLOCK.get()).build(null));
 
     public static void register(IEventBus eventBus) { BLOCK_ENTITIES.register(eventBus); }
 }

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "spacecraft:block/deepslate_meteoric_iron_ore"
+  }
+}

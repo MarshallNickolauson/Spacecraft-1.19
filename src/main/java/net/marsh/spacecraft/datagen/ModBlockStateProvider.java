@@ -33,6 +33,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         blockWithItem(ModBlocks.TIN_ORE);
         blockWithItem(ModBlocks.TITANIUM_ORE);
         blockWithItem(ModBlocks.URANIUM_ORE);
+        blockWithItem(ModBlocks.WIRE_BLOCK);
     }
 
 

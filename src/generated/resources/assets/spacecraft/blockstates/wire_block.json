@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "spacecraft:block/wire_block"
+    }
+  }
+}

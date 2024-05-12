@@ -77,7 +77,7 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
     public CoalGeneratorBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.COAL_GENERATOR.get(), pos, state);
         this.facing = state.getValue(CoalGeneratorBlock.FACING);
-        this.energyOutputDirection = state.getValue(CoalGeneratorBlock.ENERGY_OUTPUT_DIRECTION);
+        this.energyOutputDirection = state.getValue(CoalGeneratorBlock.ENERGY_FLOW_DIRECTION);
 
         this.data = new ContainerData() {
             @Override
@@ -102,7 +102,7 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
         };
 
         this.ENERGY_STORAGE = new ModBlockEnergyStorage(2000, 100) {
-            private final Direction energyOutputDirection = state.getValue(CoalGeneratorBlock.ENERGY_OUTPUT_DIRECTION);
+            private final Direction energyOutputDirection = state.getValue(CoalGeneratorBlock.ENERGY_FLOW_DIRECTION);
 
             @Override
             public void onEnergyChanged() {

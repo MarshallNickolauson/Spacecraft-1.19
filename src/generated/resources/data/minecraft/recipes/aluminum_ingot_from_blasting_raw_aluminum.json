@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:blasting",
+  "cookingtime": 200,
+  "experience": 0.7,
+  "group": "aluminum",
+  "ingredient": {
+    "item": "spacecraft:raw_aluminum"
+  },
+  "result": "spacecraft:aluminum_ingot"
+}

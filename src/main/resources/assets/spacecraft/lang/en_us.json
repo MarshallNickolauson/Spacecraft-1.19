@@ -58,6 +58,7 @@
   "block.spacecraft.circuit_fabricator": "Circuit Fabricator",
   "block.spacecraft.electric_compressor": "Electric Compressor",
   "block.spacecraft.steel_foundry": "Steel Foundry",
+  "block.spacecraft.wire_block": "Wire Block",
 
   "item.spacecraft.battery": "Battery",
   "tooltip.spacecraft.energy_remaining": "Energy Remaining: %s"

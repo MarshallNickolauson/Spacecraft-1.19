@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "cookingtime": 200,
+  "experience": 0.7,
+  "group": "uranium",
+  "ingredient": {
+    "item": "spacecraft:raw_uranium"
+  },
+  "result": "spacecraft:uranium_ingot"
+}
