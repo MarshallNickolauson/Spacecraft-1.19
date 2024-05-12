@@ -3,74 +3,31 @@ package net.marsh.spacecraft.block.custom;
 import net.marsh.spacecraft.block.ModBlockEntities;
 import net.marsh.spacecraft.block.entity.SteelFoundryBlockEntity;
 import net.marsh.spacecraft.sound.ModSounds;
+import net.marsh.spacecraft.util.WireConnectionType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 @SuppressWarnings("ALL")
-public class SteelFoundryBlock extends BaseEntityBlock {
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    public static final BooleanProperty LIT = BooleanProperty.create("lit");
-    public static final DirectionProperty ENERGY_INPUT_DIRECTION = DirectionProperty.create("energy_input", Direction.values());
+public class SteelFoundryBlock extends AbstractMachineBlock {
 
-    public SteelFoundryBlock(Properties pProperties) {
-        super(pProperties);
-        this.registerDefaultState(this.stateDefinition.any()
-                .setValue(LIT, false)
-                .setValue(ENERGY_INPUT_DIRECTION, Direction.NORTH)
-        );
-    }
-
-    @Nullable
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        Direction facing = pContext.getHorizontalDirection().getOpposite();
-        return this.defaultBlockState()
-                .setValue(FACING, facing)
-                .setValue(ENERGY_INPUT_DIRECTION, facing);
-    }
-
-    @Override
-    public BlockState rotate(BlockState pState, Rotation pRot) {
-        return pState.setValue(FACING, pRot.rotate(pState.getValue(FACING)));
-    }
-
-    @Override
-    public BlockState mirror(BlockState pState, Mirror pMirror) {
-        return pState.rotate(pMirror.getRotation(pState.getValue(FACING)));
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-        pBuilder.add(FACING, LIT, ENERGY_INPUT_DIRECTION);
+    public SteelFoundryBlock() {
+        super(WireConnectionType.ENERGY_INPUT);
     }
 
     @Override
@@ -78,39 +35,6 @@ public class SteelFoundryBlock extends BaseEntityBlock {
         components.add(Component.literal("Melts iron and coal fragments into steel using electric arc diodes.").withStyle(ChatFormatting.WHITE));
         components.add(Component.literal("Consumes 51FE/tick").withStyle(ChatFormatting.RED));
         super.appendHoverText(pStack, pLevel, components, pFlag);
-    }
-
-    /* BLOCK ENTITY BELOW */
-
-    @Override
-    public RenderShape getRenderShape(BlockState pState) {
-        return RenderShape.MODEL;
-    }
-
-    @Override
-    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-        if (pState.getBlock() != pNewState.getBlock()) {
-            BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-            if (blockEntity instanceof SteelFoundryBlockEntity) {
-                ((SteelFoundryBlockEntity) blockEntity).drops();
-                pLevel.playSound(null, pPos, null, SoundSource.RECORDS, 0.0f, 0.0f);
-            }
-        }
-        super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
-    }
-
-    @Override
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        if (!pLevel.isClientSide()) {
-            BlockEntity entity = pLevel.getBlockEntity(pPos);
-            if(entity instanceof SteelFoundryBlockEntity) {
-                NetworkHooks.openScreen(((ServerPlayer)pPlayer), (SteelFoundryBlockEntity)entity, pPos);
-            } else {
-                throw new IllegalStateException("Our Container provider is missing!");
-            }
-        }
-
-        return InteractionResult.sidedSuccess(pLevel.isClientSide());
     }
 
     @Nullable

@@ -1,8 +1,7 @@
 package net.marsh.spacecraft.block.entity;
 
 import net.marsh.spacecraft.block.ModBlockEntities;
-import net.marsh.spacecraft.block.NewWrappedHandler;
-import net.marsh.spacecraft.block.WrappedHandler;
+import net.marsh.spacecraft.block.custom.AbstractMachineBlock;
 import net.marsh.spacecraft.block.custom.SteelFoundryBlock;
 import net.marsh.spacecraft.item.ModItems;
 import net.marsh.spacecraft.networking.ModMessages;
@@ -22,20 +21,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
-
 public class SteelFoundryBlockEntity extends AbstractMachineBlockEntity {
 
     private static final int ENERGY_REQUIRED = 51;
-    private final Direction facing;
-    private final Direction energyInputDirection;
     private int craftingProgress = 0;
     private int maxCraftingProgress = 100;
     private int diodeChargeProgress = 0;
@@ -43,8 +35,6 @@ public class SteelFoundryBlockEntity extends AbstractMachineBlockEntity {
 
     public SteelFoundryBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.STEEL_FOUNDRY.get(), pos, state);
-        this.facing = state.getValue(SteelFoundryBlock.FACING);
-        this.energyInputDirection = state.getValue(SteelFoundryBlock.ENERGY_INPUT_DIRECTION);
     }
 
     @Override

@@ -29,23 +29,8 @@ import java.util.List;
 @SuppressWarnings("ALL")
 public class CoalGeneratorBlock extends AbstractMachineBlock {
 
-    public CoalGeneratorBlock(Properties pProperties) {
-        super(pProperties);
-        this.registerDefaultState(this.stateDefinition.any()
-                .setValue(LIT, false)
-                .setValue(ENERGY_FLOW_DIRECTION, Direction.NORTH)
-                .setValue(ENERGY_CONNECTION_TYPE, WireConnectionType.ENERGY_OUTPUT)
-        );
-    }
-
-    @Nullable
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        Direction facing = pContext.getHorizontalDirection().getOpposite();
-        return this.defaultBlockState()
-                .setValue(FACING, facing)
-                .setValue(ENERGY_FLOW_DIRECTION, facing)
-                .setValue(ENERGY_CONNECTION_TYPE, WireConnectionType.ENERGY_OUTPUT);
+    public CoalGeneratorBlock() {
+        super(WireConnectionType.ENERGY_OUTPUT);
     }
 
     @Override

@@ -2,6 +2,7 @@ package net.marsh.spacecraft.block.entity;
 
 import net.marsh.spacecraft.block.ModBlockEntities;
 import net.marsh.spacecraft.block.WrappedHandler;
+import net.marsh.spacecraft.block.custom.AbstractMachineBlock;
 import net.marsh.spacecraft.block.custom.CoalGeneratorBlock;
 import net.marsh.spacecraft.item.ModItems;
 import net.marsh.spacecraft.item.custom.BatteryItem;
@@ -69,15 +70,11 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
     private LazyOptional<IEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
 
     private final ModBlockEnergyStorage ENERGY_STORAGE;
-    private final Direction facing;
-    private final Direction energyOutputDirection;
     protected final ContainerData data;
     private int burnTime = 0;
 
     public CoalGeneratorBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.COAL_GENERATOR.get(), pos, state);
-        this.facing = state.getValue(CoalGeneratorBlock.FACING);
-        this.energyOutputDirection = state.getValue(CoalGeneratorBlock.ENERGY_FLOW_DIRECTION);
 
         this.data = new ContainerData() {
             @Override
@@ -102,7 +99,7 @@ public class CoalGeneratorBlockEntity extends BlockEntity implements MenuProvide
         };
 
         this.ENERGY_STORAGE = new ModBlockEnergyStorage(2000, 100) {
-            private final Direction energyOutputDirection = state.getValue(CoalGeneratorBlock.ENERGY_FLOW_DIRECTION);
+            private final Direction energyOutputDirection = state.getValue(AbstractMachineBlock.FACING);
 
             @Override
             public void onEnergyChanged() {
