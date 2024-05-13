@@ -25,5 +25,16 @@ public class ModFluids {
             .block(ModBlocks.CRUDE_OIL_BLOCK)
             .bucket(ModItems.CRUDE_OIL_BUCKET);
 
+    public static final RegistryObject<FlowingFluid> SOURCE_FUEL = FLUIDS.register("fuel_fluid",
+            () -> new ForgeFlowingFluid.Source(ModFluids.FUEL_FLUID_PROPERTIES));
+    public static final RegistryObject<FlowingFluid> FLOWING_FUEL = FLUIDS.register("flowing_fuel",
+            () -> new ForgeFlowingFluid.Flowing(ModFluids.FUEL_FLUID_PROPERTIES));
+
+    public static final ForgeFlowingFluid.Properties FUEL_FLUID_PROPERTIES = new ForgeFlowingFluid.Properties(
+            ModFluidTypes.FUEL_FLUID_TYPE, SOURCE_FUEL, FLOWING_FUEL)
+            .slopeFindDistance(2).levelDecreasePerBlock(2)
+            .block(ModBlocks.FUEL_BLOCK)
+            .bucket(ModItems.FUEL_BUCKET);
+
     public static void register(IEventBus eventBus) { FLUIDS.register(eventBus); }
 }

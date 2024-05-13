@@ -49,6 +49,7 @@ public class ModItems {
     public static final RegistryObject<Item> BASIC_WAFER = ITEMS.register("basic_wafer", () -> new Item(new Item.Properties().tab(ModCreativeModTab.SPACECRAFT_TAB)));
 
     public static final RegistryObject<Item> CRUDE_OIL_BUCKET = ITEMS.register("crude_oil_bucket", () -> new BucketItem(ModFluids.SOURCE_CRUDE_OIL, new Item.Properties().tab(ModCreativeModTab.SPACECRAFT_TAB).craftRemainder(Items.BUCKET).stacksTo(1)));
+    public static final RegistryObject<Item> FUEL_BUCKET = ITEMS.register("fuel_bucket", () -> new BucketItem(ModFluids.SOURCE_FUEL, new Item.Properties().tab(ModCreativeModTab.SPACECRAFT_TAB).craftRemainder(Items.BUCKET).stacksTo(1)));
 
     public static void register(IEventBus eventBus) { ITEMS.register(eventBus); }
 }

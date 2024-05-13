@@ -48,6 +48,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.COMPRESSED_LEAD);
         simpleItem(ModItems.BASIC_WAFER);
         simpleItem(ModItems.CRUDE_OIL_BUCKET);
+        simpleItem(ModItems.FUEL_BUCKET);
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {

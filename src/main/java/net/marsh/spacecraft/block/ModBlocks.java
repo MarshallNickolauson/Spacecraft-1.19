@@ -52,6 +52,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> WIRE_BLOCK = registerBlock("wire_block", () -> new WireBlock(BlockBehaviour.Properties.of(Material.WOOL).strength(1f).noOcclusion()), ModCreativeModTab.SPACECRAFT_TAB);
 
     public static final RegistryObject<LiquidBlock> CRUDE_OIL_BLOCK = BLOCKS.register("crude_oil_block", () -> new LiquidBlock(ModFluids.SOURCE_CRUDE_OIL, BlockBehaviour.Properties.copy(Blocks.WATER)));
+    public static final RegistryObject<LiquidBlock> FUEL_BLOCK = BLOCKS.register("fuel_block", () -> new LiquidBlock(ModFluids.SOURCE_FUEL, BlockBehaviour.Properties.copy(Blocks.WATER)));
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block, CreativeModeTab tab) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);
