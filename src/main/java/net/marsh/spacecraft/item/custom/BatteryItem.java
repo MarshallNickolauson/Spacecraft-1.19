@@ -1,6 +1,5 @@
 package net.marsh.spacecraft.item.custom;
 
-import net.marsh.spacecraft.networking.ModMessages;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
