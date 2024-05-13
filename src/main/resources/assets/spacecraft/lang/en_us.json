@@ -32,6 +32,8 @@
   "item.spacecraft.compressed_lead": "Compressed Lead",
 
   "item.spacecraft.basic_wafer": "Basic Wafer",
+  "item.spacecraft.advanced_wafer": "Advanced Wafer",
+  "item.spacecraft.solar_wafer": "Solar Wafer",
 
   "item.spacecraft.crude_oil_bucket": "Crude Oil Bucket",
   "item.spacecraft.fuel_bucket": "Fuel Bucket",
