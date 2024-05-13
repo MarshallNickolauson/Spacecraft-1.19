@@ -28,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
+@SuppressWarnings("ALL")
 public abstract class AbstractMachineBlockEntity extends BlockEntity implements MenuProvider {
     protected ModBlockEnergyStorage ENERGY_STORAGE;
     protected ItemStackHandler itemHandler;
@@ -69,7 +70,7 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     protected abstract ModBlockEnergyStorage createEnergyStorage();
 
     @Override
-    public abstract @NotNull Component getDisplayName();
+    public abstract Component getDisplayName();
 
     @Nullable
     @Override

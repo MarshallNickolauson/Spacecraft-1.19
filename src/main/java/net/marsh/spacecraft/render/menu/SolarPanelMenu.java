@@ -25,7 +25,7 @@ public class SolarPanelMenu extends AbstractContainerMenu {
 
     public SolarPanelMenu(int id, Inventory inv, BlockEntity entity, ContainerData data) {
         super(ModMenuTypes.SOLAR_PANEL_MENU.get(), id);
-        checkContainerSize(inv, 2);
+        checkContainerSize(inv, 1);
         blockEntity = (SolarPanelBlockEntity) entity;
         this.level = inv.player.level;
         this.data = data;
@@ -34,7 +34,7 @@ public class SolarPanelMenu extends AbstractContainerMenu {
         addPlayerHotbar(inv);
 
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
-            this.addSlot(new SlotItemHandler(handler, 0, 80, 61));
+            this.addSlot(new SlotItemHandler(handler, 0, 8, 62));
         });
 
         addDataSlots(data);

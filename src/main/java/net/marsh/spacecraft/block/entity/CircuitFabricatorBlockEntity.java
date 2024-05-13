@@ -8,11 +8,8 @@ import net.marsh.spacecraft.networking.packet.CircuitFabricatorEnergySyncS2CPack
 import net.marsh.spacecraft.render.menu.CircuitFabricatorMenu;
 import net.marsh.spacecraft.util.ModBlockEnergyStorage;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.Containers;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -23,13 +20,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,47 +28,19 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 @SuppressWarnings("ALL")
-public class CircuitFabricatorBlockEntity extends BlockEntity implements MenuProvider {
+public class CircuitFabricatorBlockEntity extends AbstractMachineBlockEntity {
 
-    private final ItemStackHandler itemHandler = new ItemStackHandler(7) {
-        @Override
-        protected void onContentsChanged(int slot) {
-            setChanged();
-        }
-
-        @Override
-        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            return switch (slot) {
-                case 0 -> stack.getItem() == Items.DIAMOND;
-                case 1 -> stack.getItem() == Items.DIAMOND;
-                case 2 -> stack.getItem() == ModItems.RAW_SILICON.get();
-                case 3 -> stack.getItem() == ModItems.RAW_SILICON.get();
-                case 4 -> stack.getItem() == Items.REDSTONE;
-                case 5 -> stack.getItem() == Items.REDSTONE_TORCH;
-                case 6 -> stack.getItem() == ModItems.BASIC_WAFER.get();
-                default -> super.isItemValid(slot, stack);
-            };
-        }
-    };
-
-    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
-
-    private LazyOptional<IEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
-
-    private ModBlockEnergyStorage ENERGY_STORAGE;
     private static final int ENERGY_REQUIRED = 100;
-    private final Direction facing;
-    private final Direction energyInputDirection;
-    protected final ContainerData data;
     private int progress = 0;
     private int maxProgress = 200;
 
     public CircuitFabricatorBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.CIRCUIT_FABRICATOR.get(), pos, state);
-        this.facing = state.getValue(CircuitFabricatorBlock.FACING);
-        this.energyInputDirection = state.getValue(CircuitFabricatorBlock.ENERGY_INPUT_DIRECTION);
+    }
 
-        this.data = new ContainerData() {
+    @Override
+    protected ContainerData createContainerData() {
+        return new ContainerData() {
             @Override
             public int get(int index) {
                 return switch (index) {
@@ -100,35 +63,54 @@ public class CircuitFabricatorBlockEntity extends BlockEntity implements MenuPro
                 return 2;
             }
         };
+    }
 
-        this.ENERGY_STORAGE = new ModBlockEnergyStorage(10000, 1000) {
+    @Override
+    protected ItemStackHandler createItemHandler() {
+        return new ItemStackHandler(7) {
+            @Override
+            protected void onContentsChanged(int slot) {
+                setChanged();
+            }
 
+            @Override
+            public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+                return switch (slot) {
+                    case 0 -> stack.getItem() == Items.DIAMOND;
+                    case 1 -> stack.getItem() == Items.DIAMOND;
+                    case 2 -> stack.getItem() == ModItems.RAW_SILICON.get();
+                    case 3 -> stack.getItem() == ModItems.RAW_SILICON.get();
+                    case 4 -> stack.getItem() == Items.REDSTONE;
+                    case 5 -> stack.getItem() == Items.REDSTONE_TORCH;
+                    case 6 -> false;
+                    default -> super.isItemValid(slot, stack);
+                };
+            }
+        };
+    }
+
+    @Override
+    protected int[] getSlotsForUp() {
+        return new int[]{1, 2, 3, 4, 5};
+    }
+
+    @Override
+    protected int[] getSlotsForDown() {
+        return new int[]{6};
+    }
+
+    @Override
+    protected int[] getSlotsForSides() {
+        return new int[]{1, 2, 3, 4, 5};
+    }
+
+    @Override
+    protected ModBlockEnergyStorage createEnergyStorage() {
+        return new ModBlockEnergyStorage(10000, 1000) {
             @Override
             public void onEnergyChanged() {
                 setChanged();
                 ModMessages.sendToClients(new CircuitFabricatorEnergySyncS2CPacket(this.energy, getBlockPos()));
-            }
-
-            @Override
-            public int receiveEnergy(int maxReceive, boolean simulate) {
-                if (CircuitFabricatorBlockEntity.this.facing != CircuitFabricatorBlockEntity.this.energyInputDirection) {
-                    return 0;
-                }
-
-                return super.receiveEnergy(maxExtract, simulate);
-            }
-
-            @Override
-            public int extractEnergy(int maxExtract, boolean simulate) {
-                if (!hasRecipeInProgress()) {
-                    return 0;
-                }
-
-                return super.extractEnergy(maxExtract, simulate);
-            }
-
-            private boolean hasRecipeInProgress() {
-                return hasRecipe(CircuitFabricatorBlockEntity.this) && progress < maxProgress;
             }
         };
     }
@@ -144,79 +126,16 @@ public class CircuitFabricatorBlockEntity extends BlockEntity implements MenuPro
         return new CircuitFabricatorMenu(id, inventory, this, this.data);
     }
 
-    public IEnergyStorage getEnergyStorage() {
-        return ENERGY_STORAGE;
-    }
-
-    public void setEnergyLevel(int energy) {
-        this.ENERGY_STORAGE.setEnergy(energy);
-    }
-
-    @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == ForgeCapabilities.ENERGY) {
-            BlockState blockState = getBlockState();
-            Direction facingDirection = blockState.getValue(CircuitFabricatorBlock.FACING);
-
-            // Determine the direction based on the facing direction of the block
-            Direction energyDirection = switch (facingDirection) {
-                case NORTH -> Direction.SOUTH;
-                case SOUTH -> Direction.NORTH;
-                case WEST -> Direction.EAST;
-                case EAST -> Direction.WEST;
-                default -> Direction.EAST; // Default to EAST if facing direction is not recognized
-            };
-
-            if (side == energyDirection) {
-                return lazyEnergyHandler.cast();
-            }
-        }
-
-        if (cap == ForgeCapabilities.ITEM_HANDLER) {
-            return lazyItemHandler.cast();
-        }
-
-        return super.getCapability(cap, side);
-    }
-
-    @Override
-    public void onLoad() {
-        super.onLoad();
-        lazyItemHandler = LazyOptional.of(() -> itemHandler);
-        lazyEnergyHandler = LazyOptional.of(() -> ENERGY_STORAGE);
-    }
-
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        lazyItemHandler.invalidate();
-        lazyEnergyHandler.invalidate();
-    }
-
     @Override
     protected void saveAdditional(CompoundTag nbt) {
-        nbt.put("inventory", itemHandler.serializeNBT());
         nbt.putInt("circuit_fabricator_progress", this.progress);
-        nbt.putInt("circuit_fabricator.energy", ENERGY_STORAGE.getEnergyStored());
-
         super.saveAdditional(nbt);
     }
 
     @Override
     public void load(CompoundTag nbt) {
         super.load(nbt);
-        itemHandler.deserializeNBT(nbt.getCompound("inventory"));
         progress = nbt.getInt("circuit_fabricator_progress");
-        ENERGY_STORAGE.setEnergy(nbt.getInt("circuit_fabricator.energy"));
-    }
-
-    public void drops() {
-        SimpleContainer inventory = new SimpleContainer(itemHandler.getSlots());
-        for (int i = 0; i < itemHandler.getSlots(); i++) {
-            inventory.setItem(i, itemHandler.getStackInSlot(i));
-        }
-
-        Containers.dropContents(this.level, this.worldPosition, inventory);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, CircuitFabricatorBlockEntity entity) {

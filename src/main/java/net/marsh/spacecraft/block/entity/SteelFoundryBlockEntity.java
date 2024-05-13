@@ -1,7 +1,6 @@
 package net.marsh.spacecraft.block.entity;
 
 import net.marsh.spacecraft.block.ModBlockEntities;
-import net.marsh.spacecraft.block.custom.AbstractMachineBlock;
 import net.marsh.spacecraft.block.custom.SteelFoundryBlock;
 import net.marsh.spacecraft.item.ModItems;
 import net.marsh.spacecraft.networking.ModMessages;
@@ -9,7 +8,6 @@ import net.marsh.spacecraft.networking.packet.SteelFoundryEnergySyncS2CPacket;
 import net.marsh.spacecraft.render.menu.SteelFoundryMenu;
 import net.marsh.spacecraft.util.ModBlockEnergyStorage;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.SimpleContainer;
@@ -116,7 +114,7 @@ public class SteelFoundryBlockEntity extends AbstractMachineBlockEntity {
     }
 
     @Override
-    public @NotNull Component getDisplayName() {
+    public Component getDisplayName() {
         return Component.literal("Steel Foundry");
     }
 
