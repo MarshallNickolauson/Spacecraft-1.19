@@ -3,6 +3,8 @@ package net.marsh.spacecraft;
 import com.mojang.logging.LogUtils;
 import net.marsh.spacecraft.block.ModBlockEntities;
 import net.marsh.spacecraft.block.ModBlocks;
+import net.marsh.spacecraft.fluid.ModFluidTypes;
+import net.marsh.spacecraft.fluid.ModFluids;
 import net.marsh.spacecraft.item.ModItems;
 import net.marsh.spacecraft.networking.ModMessages;
 import net.marsh.spacecraft.recipe.ModRecipes;
@@ -12,6 +14,8 @@ import net.marsh.spacecraft.sound.ModSounds;
 import net.marsh.spacecraft.world.feature.ModConfiguredFeatures;
 import net.marsh.spacecraft.world.feature.ModPlacedFeatures;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -39,6 +43,8 @@ public class Spacecraft {
         ModMenuTypes.register(modEventBus);
         ModRecipes.register(modEventBus);
         ModSounds.register(modEventBus);
+        ModFluids.register(modEventBus);
+        ModFluidTypes.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
@@ -59,6 +65,9 @@ public class Spacecraft {
             MenuScreens.register(ModMenuTypes.CIRCUIT_FABRICATOR_MENU.get(), CircuitFabricatorScreen::new);
             MenuScreens.register(ModMenuTypes.ELECTRIC_COMPRESSOR_MENU.get(), ElectricCompressorScreen::new);
             MenuScreens.register(ModMenuTypes.STEEL_FOUNDRY_MENU.get(), SteelFoundryScreen::new);
+
+            ItemBlockRenderTypes.setRenderLayer(ModFluids.SOURCE_CRUDE_OIL.get(), RenderType.translucent());
+            ItemBlockRenderTypes.setRenderLayer(ModFluids.FLOWING_CRUDE_OIL.get(), RenderType.translucent());
         }
     }
 }

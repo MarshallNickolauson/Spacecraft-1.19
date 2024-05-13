@@ -2,15 +2,14 @@ package net.marsh.spacecraft.block;
 
 import net.marsh.spacecraft.Spacecraft;
 import net.marsh.spacecraft.block.custom.*;
+import net.marsh.spacecraft.fluid.ModFluids;
 import net.marsh.spacecraft.item.ModCreativeModTab;
 import net.marsh.spacecraft.item.ModItems;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.DropExperienceBlock;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -51,6 +50,8 @@ public class ModBlocks {
     public static final RegistryObject<Block> STEEL_FOUNDRY = registerBlock("steel_foundry", () -> new SteelFoundryBlock(), ModCreativeModTab.SPACECRAFT_TAB);
 
     public static final RegistryObject<Block> WIRE_BLOCK = registerBlock("wire_block", () -> new WireBlock(BlockBehaviour.Properties.of(Material.WOOL).strength(1f).noOcclusion()), ModCreativeModTab.SPACECRAFT_TAB);
+
+    public static final RegistryObject<LiquidBlock> CRUDE_OIL_BLOCK = BLOCKS.register("crude_oil_block", () -> new LiquidBlock(ModFluids.SOURCE_CRUDE_OIL, BlockBehaviour.Properties.copy(Blocks.WATER)));
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block, CreativeModeTab tab) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);

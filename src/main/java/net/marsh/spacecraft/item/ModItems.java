@@ -1,8 +1,11 @@
 package net.marsh.spacecraft.item;
 
 import net.marsh.spacecraft.Spacecraft;
+import net.marsh.spacecraft.fluid.ModFluids;
 import net.marsh.spacecraft.item.custom.BatteryItem;
+import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -44,6 +47,8 @@ public class ModItems {
 
     public static final RegistryObject<Item> BATTERY = ITEMS.register("battery", () -> new BatteryItem(new Item.Properties().tab(ModCreativeModTab.SPACECRAFT_TAB), 10000, 100));
     public static final RegistryObject<Item> BASIC_WAFER = ITEMS.register("basic_wafer", () -> new Item(new Item.Properties().tab(ModCreativeModTab.SPACECRAFT_TAB)));
+
+    public static final RegistryObject<Item> CRUDE_OIL_BUCKET = ITEMS.register("crude_oil_bucket", () -> new BucketItem(ModFluids.SOURCE_CRUDE_OIL, new Item.Properties().tab(ModCreativeModTab.SPACECRAFT_TAB).craftRemainder(Items.BUCKET).stacksTo(1)));
 
     public static void register(IEventBus eventBus) { ITEMS.register(eventBus); }
 }

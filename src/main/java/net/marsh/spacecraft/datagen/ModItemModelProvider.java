@@ -47,6 +47,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.COMPRESSED_TITANIUM);
         simpleItem(ModItems.COMPRESSED_LEAD);
         simpleItem(ModItems.BASIC_WAFER);
+        simpleItem(ModItems.CRUDE_OIL_BUCKET);
     }
 
     private ItemModelBuilder simpleItem(RegistryObject<Item> item) {
