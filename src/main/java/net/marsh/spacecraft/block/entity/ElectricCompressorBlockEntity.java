@@ -4,7 +4,7 @@ import net.marsh.spacecraft.block.ModBlockEntities;
 import net.marsh.spacecraft.block.custom.ElectricCompressorBlock;
 import net.marsh.spacecraft.networking.ModMessages;
 import net.marsh.spacecraft.networking.packet.ElectricCompressorEnergySyncS2CPacket;
-import net.marsh.spacecraft.recipe.ElectricCompressorRecipe;
+import net.marsh.spacecraft.recipe.CompressingShapedRecipe;
 import net.marsh.spacecraft.render.menu.ElectricCompressorMenu;
 import net.marsh.spacecraft.util.ModBlockEnergyStorage;
 import net.minecraft.core.BlockPos;
@@ -185,8 +185,8 @@ public class ElectricCompressorBlockEntity extends AbstractMachineBlockEntity {
             inventory.setItem(i, entity.itemHandler.getStackInSlot(i));
         }
 
-        Optional<ElectricCompressorRecipe> recipe = level.getRecipeManager()
-                .getRecipeFor(ElectricCompressorRecipe.Type.INSTANCE, inventory, level);
+        Optional<CompressingShapedRecipe> recipe = level.getRecipeManager()
+                .getRecipeFor(CompressingShapedRecipe.Type.INSTANCE, inventory, level);
 
         if(hasRecipe(entity)) {
             for (int i = 1; i <= 9; i++) {
@@ -213,8 +213,8 @@ public class ElectricCompressorBlockEntity extends AbstractMachineBlockEntity {
             inventory.setItem(i, entity.itemHandler.getStackInSlot(i));
         }
 
-        Optional<ElectricCompressorRecipe> recipe = level.getRecipeManager()
-                .getRecipeFor(ElectricCompressorRecipe.Type.INSTANCE, inventory, level);
+        Optional<CompressingShapedRecipe> recipe = level.getRecipeManager()
+                .getRecipeFor(CompressingShapedRecipe.Type.INSTANCE, inventory, level);
 
         return recipe.isPresent() && canInsertItemIntoOutputSlot(inventory, recipe.get().getResultItem());
     }

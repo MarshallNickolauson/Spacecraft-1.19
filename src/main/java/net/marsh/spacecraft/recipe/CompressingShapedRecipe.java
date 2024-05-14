@@ -18,13 +18,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("ALL")
-public class ElectricCompressorRecipe implements Recipe<SimpleContainer> {
+public class CompressingShapedRecipe implements Recipe<SimpleContainer> {
 
     private final ResourceLocation id;
     private final ItemStack output;
     private final NonNullList<Ingredient> recipeItems;
 
-    public ElectricCompressorRecipe(ResourceLocation id, ItemStack output, NonNullList<Ingredient> recipeItems) {
+    public CompressingShapedRecipe(ResourceLocation id, ItemStack output, NonNullList<Ingredient> recipeItems) {
         this.id = id;
         this.output = output;
         this.recipeItems = recipeItems;
@@ -75,7 +75,7 @@ public class ElectricCompressorRecipe implements Recipe<SimpleContainer> {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return null;
+        return Serializer.INSTANCE;
     }
 
     @Override
@@ -83,65 +83,61 @@ public class ElectricCompressorRecipe implements Recipe<SimpleContainer> {
         return Type.INSTANCE;
     }
 
-    public static class Type implements RecipeType<ElectricCompressorRecipe> {
+    public static class Type implements RecipeType<CompressingShapedRecipe> {
         private Type() { }
         public static final Type INSTANCE = new Type();
-        public static final String ID = "electric_compressing";
+        public static final String ID = "compressing_shaped";
     }
 
-    public static class Serializer implements RecipeSerializer<ElectricCompressorRecipe> {
+    public static class Serializer implements RecipeSerializer<CompressingShapedRecipe> {
         public static final Serializer INSTANCE = new Serializer();
         public static final ResourceLocation ID =
-                new ResourceLocation(Spacecraft.MOD_ID, "electric_compressing"); //type
+                new ResourceLocation(Spacecraft.MOD_ID, "compressing_shaped");
 
         @Override
-        public ElectricCompressorRecipe fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {
+        public CompressingShapedRecipe fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {
             ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(pSerializedRecipe, "result"));
 
-            // Parse the ingredients
             JsonArray pattern = GsonHelper.getAsJsonArray(pSerializedRecipe, "pattern");
             JsonElement keyElement = GsonHelper.getAsJsonObject(pSerializedRecipe, "key");
             JsonObject key = keyElement.getAsJsonObject();
 
-            // Create a map to store character-to-ingredient mappings
             Map<Character, Ingredient> ingredientMap = new HashMap<>();
 
-            // Iterate over the keys in the key object
             for (Map.Entry<String, JsonElement> entry : key.entrySet()) {
                 Ingredient ingredient = Ingredient.fromJson(entry.getValue());
-                // Get the character associated with the ingredient
                 char keyChar = entry.getKey().charAt(0); // Assuming each key is a single character
                 ingredientMap.put(keyChar, ingredient);
             }
 
-            // Create a list to store the ingredients based on the pattern
             NonNullList<Ingredient> inputs = NonNullList.withSize(9, Ingredient.EMPTY);
-            int index = 0; // Index for the pattern
+            int row = 0;
+            int col = 0;
 
-            // Iterate over the pattern and fill in the ingredients list
             for (JsonElement patternRow : pattern) {
                 String patternRowString = patternRow.getAsString();
                 for (char c : patternRowString.toCharArray()) {
-                    // Skip if the character is a space
                     if (c != ' ') {
-                        // Get the ingredient associated with the character from the map
                         Ingredient ingredient = ingredientMap.get(c);
                         if (ingredient != null) {
-                            inputs.set(index++, ingredient);
+                            inputs.set(row * 3 + col, ingredient);
+                            col++;
                         } else {
                             throw new IllegalStateException("Invalid pattern character: " + c);
                         }
                     } else {
-                        inputs.set(index++, Ingredient.EMPTY);
+                        col++;
                     }
                 }
+                row++;
+                col = 0;
             }
 
-            return new ElectricCompressorRecipe(pRecipeId, output, inputs);
+            return new CompressingShapedRecipe(pRecipeId, output, inputs);
         }
 
         @Override
-        public @Nullable ElectricCompressorRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
+        public @Nullable CompressingShapedRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
             NonNullList<Ingredient> inputs = NonNullList.withSize(buf.readInt(), Ingredient.EMPTY);
 
             for (int i = 0; i < 9; i++) {
@@ -149,11 +145,11 @@ public class ElectricCompressorRecipe implements Recipe<SimpleContainer> {
             }
 
             ItemStack output = buf.readItem();
-            return new ElectricCompressorRecipe(id, output, inputs);
+            return new CompressingShapedRecipe(id, output, inputs);
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf buf, ElectricCompressorRecipe recipe) {
+        public void toNetwork(FriendlyByteBuf buf, CompressingShapedRecipe recipe) {
             buf.writeInt(recipe.getIngredients().size());
 
             for (Ingredient ing : recipe.getIngredients()) {

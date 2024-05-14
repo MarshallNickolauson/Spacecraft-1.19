@@ -1,5 +1,5 @@
 {
-  "type": "spacecraft:electric_compressing",
+  "type": "spacecraft:compressing_shaped",
   "key": {
     "I": {
       "item": "spacecraft:tin_ingot"

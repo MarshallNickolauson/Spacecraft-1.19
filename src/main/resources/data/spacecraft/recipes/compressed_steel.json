@@ -1,17 +1,14 @@
 {
-  "type": "spacecraft:electric_compressing",
+  "type": "spacecraft:compressing_shaped",
   "key": {
     "I": {
-      "item": "spacecraft:compressed_iron"
-    },
-    "C": {
-      "item": "minecraft:coal"
+      "item": "spacecraft:steel_ingot"
     }
   },
   "pattern":[
     "  ",
-    " IC",
-    " CI"
+    " II",
+    " II"
   ],
   "result": {
     "item": "spacecraft:compressed_steel"
