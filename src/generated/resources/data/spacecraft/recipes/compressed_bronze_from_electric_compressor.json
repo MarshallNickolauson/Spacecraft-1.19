@@ -1,0 +1,19 @@
+{
+  "type": "spacecraft:compressing_shaped",
+  "key": {
+    "C": {
+      "item": "minecraft:copper_ingot"
+    },
+    "I": {
+      "item": "spacecraft:aluminum_ingot"
+    }
+  },
+  "pattern": [
+    "  ",
+    " CC",
+    " II"
+  ],
+  "result": {
+    "item": "spacecraft:compressed_bronze"
+  }
+}

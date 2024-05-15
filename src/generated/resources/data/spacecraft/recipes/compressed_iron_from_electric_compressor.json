@@ -1,0 +1,16 @@
+{
+  "type": "spacecraft:compressing_shaped",
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    "  ",
+    " II",
+    " II"
+  ],
+  "result": {
+    "item": "spacecraft:compressed_iron"
+  }
+}
