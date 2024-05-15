@@ -16,6 +16,7 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
@@ -113,14 +114,18 @@ public class SolarPanelBlockEntity extends AbstractMachineBlockEntity {
             inventory.setItem(i, entity.itemHandler.getStackInSlot(i));
         }
 
+        int skyBrightness = level.getBrightness(LightLayer.SKY, pos) - level.getSkyDarken();
 
-        if (level.isDay()) {
+        if (skyBrightness > 0) {
             level.setBlockAndUpdate(pos, state.setValue(SolarPanelBlock.LIT, true));
             setChanged(level, pos, state);
             if (entity.ENERGY_STORAGE.getEnergyStored() < entity.ENERGY_STORAGE.getMaxEnergyStored()) {
                 entity.ENERGY_STORAGE.receiveEnergy(31, false);
                 setChanged(level, pos, state);
             }
+        } else {
+            level.setBlockAndUpdate(pos, state.setValue(SolarPanelBlock.LIT, false));
+            setChanged(level, pos, state);
         }
 
         loadEnergyBar(entity, pos);
