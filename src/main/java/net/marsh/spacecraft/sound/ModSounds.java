@@ -12,6 +12,7 @@ public class ModSounds {
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, Spacecraft.MOD_ID);
 
     public static final RegistryObject<SoundEvent> STEEL_FOUNDRY_SOUND = registerSoundEvent("steel_foundry_sound");
+    public static final RegistryObject<SoundEvent> CIRCUIT_FABRICATOR_FINISHED_SOUND = registerSoundEvent("circuit_fabricator_finished_sound");
 
     private static RegistryObject<SoundEvent> registerSoundEvent(String name) {
         ResourceLocation id = new ResourceLocation(Spacecraft.MOD_ID, name);

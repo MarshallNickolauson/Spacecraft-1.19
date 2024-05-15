@@ -4,5 +4,11 @@
     "sounds": [
       "spacecraft:steel_foundry_sound"
     ]
+  },
+  "circuit_fabricator_finished_sound": {
+    "subtitle": "sounds.spacecraft.circuit_fabricator_finished_sound",
+    "sounds": [
+      "spacecraft:circuit_fabricator_finished_sound"
+    ]
   }
 }

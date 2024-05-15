@@ -1,0 +1,7 @@
+{
+  "type": "spacecraft:circuit_fabricating",
+  "ingredient": "minecraft:comparator",
+  "result": {
+    "item": "spacecraft:advanced_wafer"
+  }
+}

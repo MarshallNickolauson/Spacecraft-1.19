@@ -5,11 +5,15 @@ import net.marsh.spacecraft.block.custom.CircuitFabricatorBlock;
 import net.marsh.spacecraft.item.ModItems;
 import net.marsh.spacecraft.networking.ModMessages;
 import net.marsh.spacecraft.networking.packet.CircuitFabricatorEnergySyncS2CPacket;
+import net.marsh.spacecraft.recipe.CircuitFabricatorRecipe;
 import net.marsh.spacecraft.render.menu.CircuitFabricatorMenu;
+import net.marsh.spacecraft.sound.ModSounds;
 import net.marsh.spacecraft.util.ModBlockEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -17,8 +21,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.ItemStackHandler;
@@ -81,7 +83,7 @@ public class CircuitFabricatorBlockEntity extends AbstractMachineBlockEntity {
                     case 2 -> stack.getItem() == ModItems.RAW_SILICON.get();
                     case 3 -> stack.getItem() == ModItems.RAW_SILICON.get();
                     case 4 -> stack.getItem() == Items.REDSTONE;
-                    case 5 -> stack.getItem() == Items.REDSTONE_TORCH;
+                    case 5 -> true;
                     case 6 -> false;
                     default -> super.isItemValid(slot, stack);
                 };
@@ -187,36 +189,41 @@ public class CircuitFabricatorBlockEntity extends AbstractMachineBlockEntity {
     }
 
     private static void craftItem(CircuitFabricatorBlockEntity entity) {
-        ItemStack inputStack = entity.itemHandler.getStackInSlot(1);
-        Optional<SmeltingRecipe> recipe = entity.level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SimpleContainer(inputStack), entity.level);
+        Level level = entity.level;
+        SimpleContainer inventory = new SimpleContainer(entity.itemHandler.getSlots());
+        for (int i = 0; i < entity.itemHandler.getSlots(); i++) {
+            inventory.setItem(i, entity.itemHandler.getStackInSlot(i));
+        }
+
+        Optional<CircuitFabricatorRecipe> recipe = level.getRecipeManager()
+                .getRecipeFor(CircuitFabricatorRecipe.Type.INSTANCE, inventory, level);
 
         if (hasRecipe(entity)) {
-            entity.itemHandler.extractItem(1, 1, false);
-            entity.itemHandler.extractItem(2, 1, false);
-            entity.itemHandler.extractItem(3, 1, false);
-            entity.itemHandler.extractItem(4, 1, false);
-            entity.itemHandler.extractItem(5, 1, false);
+            for (int i = 1; i <= 5; i++) {
+                entity.itemHandler.extractItem(i, 1, false);
+            }
 
-            entity.itemHandler.setStackInSlot(6, new ItemStack(ModItems.BASIC_WAFER.get(),
+            entity.itemHandler.setStackInSlot(6, new ItemStack(recipe.get().getResultItem().getItem(),
                     entity.itemHandler.getStackInSlot(6).getCount() + 1));
+
+            BlockPos pos = entity.getBlockPos();
+            level.playSound(null, pos, ModSounds.CIRCUIT_FABRICATOR_FINISHED_SOUND.get(), SoundSource.BLOCKS, 0.3f, 1.0f);
 
             entity.resetProgress();
         }
     }
 
     private static boolean hasRecipe(CircuitFabricatorBlockEntity entity) {
+        Level level = entity.level;
         SimpleContainer inventory = new SimpleContainer(entity.itemHandler.getSlots());
         for (int i = 0; i < entity.itemHandler.getSlots(); i++) {
             inventory.setItem(i, entity.itemHandler.getStackInSlot(i));
         }
 
-        return (
-                (inventory.getItem(2).getItem() == ModItems.RAW_SILICON.get())
-                && (inventory.getItem(3).getItem() == ModItems.RAW_SILICON.get())
-                && (inventory.getItem(4).getItem() == Items.REDSTONE)
-                && (inventory.getItem(5).getItem() == Items.REDSTONE_TORCH)
-                && canInsertItemIntoOutputSlot(inventory, ModItems.BASIC_WAFER.get().getDefaultInstance())
-        );
+        Optional<CircuitFabricatorRecipe> recipe = level.getRecipeManager()
+                .getRecipeFor(CircuitFabricatorRecipe.Type.INSTANCE, inventory, level);
+
+        return recipe.isPresent() && canInsertItemIntoOutputSlot(inventory, recipe.get().getResultItem());
     }
 
     private static boolean canInsertItemIntoOutputSlot(SimpleContainer inventory, ItemStack stack) {

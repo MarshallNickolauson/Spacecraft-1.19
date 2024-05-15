@@ -1,0 +1,7 @@
+{
+  "type": "spacecraft:circuit_fabricating",
+  "ingredient": "minecraft:lapis_block",
+  "result": {
+    "item": "spacecraft:solar_wafer"
+  }
+}
