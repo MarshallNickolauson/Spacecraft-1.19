@@ -3,11 +3,13 @@ package net.marsh.spacecraft.datagen;
 import net.marsh.spacecraft.Spacecraft;
 import net.marsh.spacecraft.block.ModBlocks;
 import net.marsh.spacecraft.item.ModItems;
+import net.marsh.spacecraft.recipe.builder.CircuitFabricatorRecipeBuilder;
 import net.marsh.spacecraft.recipe.builder.CompressingShapedRecipeBuilder;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -53,11 +55,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         buildCompressingShapedRecipe(consumer, Ingredient.of(ModItems.TIN_INGOT.get()), ModItems.COMPRESSED_TIN.get());
         buildCompressingShapedRecipe(consumer, Ingredient.of(ModItems.TITANIUM_INGOT.get()), ModItems.COMPRESSED_TITANIUM.get());
 
+        buildCircuitFabricatorRecipe(consumer, Items.REDSTONE_TORCH, ModItems.BASIC_WAFER.get());
+        buildCircuitFabricatorRecipe(consumer, Items.COMPARATOR, ModItems.ADVANCED_WAFER.get());
+        buildCircuitFabricatorRecipe(consumer, Items.LAPIS_BLOCK, ModItems.SOLAR_WAFER.get());
     }
 
-    private static void oreCooking(Consumer<FinishedRecipe> pFinishedRecipeConsumer, List<ItemLike> pIngredients, ItemLike pResult, float pExperience, int pCookingTime, String pGroup) {
-        oreCooking(pFinishedRecipeConsumer, RecipeSerializer.SMELTING_RECIPE, pIngredients, pResult, pExperience, pCookingTime, pGroup, "_from_smelting");
-        oreCooking(pFinishedRecipeConsumer, RecipeSerializer.BLASTING_RECIPE, pIngredients, pResult, pExperience, pCookingTime, pGroup, "_from_blasting");
+    private void buildCircuitFabricatorRecipe(Consumer<FinishedRecipe> consumer, Item ingredient, Item result) {
+        new CircuitFabricatorRecipeBuilder(ingredient, result).save(consumer, new ResourceLocation(Spacecraft.MOD_ID, result + "_from_circuit_fabricating"));
     }
 
     private void buildCompressingShapedRecipe(Consumer<FinishedRecipe> consumer, Ingredient ingredient, ItemLike result) {
@@ -67,5 +71,10 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .pattern(" II")
                 .define('I', ingredient)
                 .save(consumer, new ResourceLocation(Spacecraft.MOD_ID, result.asItem() + "_from_electric_compressor"));
+    }
+
+    private static void oreCooking(Consumer<FinishedRecipe> pFinishedRecipeConsumer, List<ItemLike> pIngredients, ItemLike pResult, float pExperience, int pCookingTime, String pGroup) {
+        oreCooking(pFinishedRecipeConsumer, RecipeSerializer.SMELTING_RECIPE, pIngredients, pResult, pExperience, pCookingTime, pGroup, "_from_smelting");
+        oreCooking(pFinishedRecipeConsumer, RecipeSerializer.BLASTING_RECIPE, pIngredients, pResult, pExperience, pCookingTime, pGroup, "_from_blasting");
     }
 }
