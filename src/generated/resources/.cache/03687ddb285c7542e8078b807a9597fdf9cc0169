@@ -1,0 +1,9 @@
+// 1.19.2	2024-05-15T22:29:35.3299605	spacecraft Loot Tables
+2a5b3680d11a08b071d38d8b88bcef9635ebaa3f data/spacecraft/loot_tables/blocks/circuit_fabricator.json
+c6502811225a451d89d215b4d17d3d57d00f878e data/spacecraft/loot_tables/blocks/coal_generator.json
+28d46f1efda45f2518ad1f39adf0ebc7c2ec62e7 data/spacecraft/loot_tables/blocks/electric_arc_furnace.json
+9cef9e8e225830b962acd54e756fe0ec6dbb7ffc data/spacecraft/loot_tables/blocks/electric_compressor.json
+48b2bde37463578503720e7257b289ce78837fbb data/spacecraft/loot_tables/blocks/electric_furnace.json
+d46fd95877c6ec259c6a1c72f3a94d01aff33ef6 data/spacecraft/loot_tables/blocks/solar_panel.json
+33f1f4372d6fdb41f13bdf18cfab1afbe84f813b data/spacecraft/loot_tables/blocks/steel_foundry.json
+8c17e865c56070af7b40ed2eb7a28febc8c05c14 data/spacecraft/loot_tables/blocks/wire_block.json

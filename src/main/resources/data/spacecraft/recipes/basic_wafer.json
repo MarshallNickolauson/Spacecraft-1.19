@@ -1,7 +1,0 @@
-{
-  "type": "spacecraft:circuit_fabricating",
-  "ingredient": "minecraft:redstone_torch",
-  "result": {
-    "item": "spacecraft:basic_wafer"
-  }
-}
