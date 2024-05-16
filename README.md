@@ -1,1 +1,1 @@
-Run "./grandlew build"
+Run "./grandlew build" in IntelliJ terminal
