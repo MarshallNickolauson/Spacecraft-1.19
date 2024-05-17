@@ -60,8 +60,8 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         buildCircuitFabricatorRecipe(consumer, Items.COMPARATOR, ModItems.ADVANCED_WAFER.get());
         buildCircuitFabricatorRecipe(consumer, Items.LAPIS_BLOCK, ModItems.SOLAR_WAFER.get());
 
-        ShapelessRecipeBuilder.shapeless(ModItems.CARBON_FRAGMENTS.get(), 4).requires(Items.COAL).unlockedBy(getHasName(Items.COAL), has(Items.COAL)).save(consumer, new ResourceLocation(Spacecraft.MOD_ID, "carbon_fragments_from_coal"));
-        ShapelessRecipeBuilder.shapeless(ModItems.CARBON_FRAGMENTS.get(), 4).requires(Items.CHARCOAL).unlockedBy(getHasName(Items.COAL), has(Items.COAL)).save(consumer, new ResourceLocation(Spacecraft.MOD_ID, "carbon_fragments_from_charcoal"));
+        buildShapelessRecipe(consumer, ModItems.CARBON_FRAGMENTS.get(), 4, Items.COAL, "carbon_fragments_from_coal");
+        buildShapelessRecipe(consumer, ModItems.CARBON_FRAGMENTS.get(), 4, Items.CHARCOAL, "carbon_fragments_from_charcoal");
     }
 
     private void buildCircuitFabricatorRecipe(Consumer<FinishedRecipe> consumer, Item ingredient, Item result) {
@@ -80,5 +80,12 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
     private static void oreCooking(Consumer<FinishedRecipe> pFinishedRecipeConsumer, List<ItemLike> pIngredients, ItemLike pResult, float pExperience, int pCookingTime, String pGroup) {
         oreCooking(pFinishedRecipeConsumer, RecipeSerializer.SMELTING_RECIPE, pIngredients, pResult, pExperience, pCookingTime, pGroup, "_from_smelting");
         oreCooking(pFinishedRecipeConsumer, RecipeSerializer.BLASTING_RECIPE, pIngredients, pResult, pExperience, pCookingTime, pGroup, "_from_blasting");
+    }
+
+    private void buildShapelessRecipe(Consumer<FinishedRecipe> consumer, ItemLike result, int count, Item ingredient, String recipeName) {
+        ShapelessRecipeBuilder.shapeless(result, count)
+                .requires(ingredient)
+                .unlockedBy(getHasName(ingredient), has(ingredient))
+                .save(consumer, new ResourceLocation(Spacecraft.MOD_ID, recipeName));
     }
 }
