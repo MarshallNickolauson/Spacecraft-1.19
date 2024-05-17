@@ -8,6 +8,7 @@ import net.marsh.spacecraft.recipe.builder.CompressingShapedRecipeBuilder;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -58,6 +59,9 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         buildCircuitFabricatorRecipe(consumer, Items.REDSTONE_TORCH, ModItems.BASIC_WAFER.get());
         buildCircuitFabricatorRecipe(consumer, Items.COMPARATOR, ModItems.ADVANCED_WAFER.get());
         buildCircuitFabricatorRecipe(consumer, Items.LAPIS_BLOCK, ModItems.SOLAR_WAFER.get());
+
+        ShapelessRecipeBuilder.shapeless(ModItems.CARBON_FRAGMENTS.get(), 4).requires(Items.COAL).unlockedBy(getHasName(Items.COAL), has(Items.COAL)).save(consumer, new ResourceLocation(Spacecraft.MOD_ID, "carbon_fragments_from_coal"));
+        ShapelessRecipeBuilder.shapeless(ModItems.CARBON_FRAGMENTS.get(), 4).requires(Items.CHARCOAL).unlockedBy(getHasName(Items.COAL), has(Items.COAL)).save(consumer, new ResourceLocation(Spacecraft.MOD_ID, "carbon_fragments_from_charcoal"));
     }
 
     private void buildCircuitFabricatorRecipe(Consumer<FinishedRecipe> consumer, Item ingredient, Item result) {
