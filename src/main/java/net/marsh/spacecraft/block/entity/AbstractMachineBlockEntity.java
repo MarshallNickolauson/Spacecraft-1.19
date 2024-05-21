@@ -36,11 +36,14 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
     protected LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
     protected LazyOptional<IEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
 
+    private int lastEnergyStored;
+
     public AbstractMachineBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
         super(pType, pPos, pBlockState);
         this.itemHandler = createItemHandler();
         this.ENERGY_STORAGE = createEnergyStorage();
         this.data = createContainerData();
+        this.lastEnergyStored = 0;
     }
 
     protected abstract ContainerData createContainerData();
@@ -132,5 +135,13 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity implements 
 
         assert this.level != null;
         Containers.dropContents(this.level, this.worldPosition, inventory);
+    }
+
+    public int getLastEnergyStored() {
+        return lastEnergyStored;
+    }
+
+    public void setLastEnergyStored(int energyStored) {
+        this.lastEnergyStored = energyStored;
     }
 }

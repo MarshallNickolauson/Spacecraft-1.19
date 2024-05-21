@@ -1,62 +1,87 @@
 package net.marsh.spacecraft.block.entity;
 
 import net.marsh.spacecraft.block.ModBlockEntities;
-import net.marsh.spacecraft.block.custom.CoalGeneratorBlock;
-import net.marsh.spacecraft.util.WireConnectionType;
+import net.marsh.spacecraft.block.networked.EnergyNetwork;
+import net.marsh.spacecraft.block.networked.EnergyNetworkManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @SuppressWarnings("ALL")
 public class WireBlockEntity extends BlockEntity {
-    private WireConnectionType energyConnectionType = WireConnectionType.WIRE;
+
+    private LazyOptional<IEnergyStorage> energyStorage = LazyOptional.empty();
+    private EnergyNetwork energyNetwork;
 
     public WireBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(ModBlockEntities.WIRE_BLOCK.get(), pPos, pBlockState);
+        this.energyNetwork = null;
     }
 
-    public WireConnectionType getEnergyConnectionType() {
-        return energyConnectionType;
+    public void updateConnection() {
+        if (level == null || level.isClientSide()) return;
+
+        System.out.println("got here");
+
+        // Find adjacent wire block entities
+        Set<WireBlockEntity> adjacentWireEntities = new HashSet<>();
+        for (Direction direction : Direction.values()) {
+            BlockEntity adjacentEntity = level.getBlockEntity(worldPosition.relative(direction));
+            if (adjacentEntity instanceof WireBlockEntity) {
+                adjacentWireEntities.add((WireBlockEntity) adjacentEntity);
+            }
+        }
+
+        // Check if any adjacent wire entity belongs to a network
+        EnergyNetwork existingNetwork = null;
+        for (WireBlockEntity adjacentWireEntity : adjacentWireEntities) {
+            if (adjacentWireEntity.getEnergyNetwork() != null) {
+                existingNetwork = adjacentWireEntity.getEnergyNetwork();
+                break;
+            }
+        }
+
+        if (existingNetwork != null) {
+            this.energyNetwork = existingNetwork;
+        } else {
+            this.energyNetwork = new EnergyNetwork();
+            EnergyNetworkManager.INSTANCE.registerNetwork(this.energyNetwork);
+        }
+
+        energyNetwork.clear();
+        energyNetwork.addWire(this);
+
+        // Merge adjacent networks
+        for (WireBlockEntity adjacentWireEntity : adjacentWireEntities) {
+            if (adjacentWireEntity.getEnergyNetwork() != this.energyNetwork) {
+                this.energyNetwork.merge(adjacentWireEntity.getEnergyNetwork());
+            }
+        }
     }
 
-    @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
-        this.energyConnectionType = WireConnectionType.valueOf(nbt.getString("energy_connection_type"));
+    public EnergyNetwork getEnergyNetwork() {
+        return energyNetwork;
     }
 
-    @Override
-    protected void saveAdditional(CompoundTag nbt) {
-        super.saveAdditional(nbt);
-        nbt.putString("energy_connection_type", energyConnectionType.name());
+    public void remove() {
+        if (energyNetwork != null) {
+            energyNetwork.removeWire(this);
+            if (energyNetwork.isEmpty()) {
+                EnergyNetworkManager.INSTANCE.unregisterNetwork(energyNetwork);
+            }
+        }
     }
 
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, WireBlockEntity wireBlockEntity) {
         if (level.isClientSide()) {
             return;
-        }
-
-        for (Direction direction : Direction.values()) {
-
-            BlockPos neighborPos = blockPos.relative(direction);
-            BlockState neighborState = level.getBlockState(neighborPos);
-
-            if (neighborState.hasProperty(CoalGeneratorBlock.ENERGY_CONNECTION_TYPE) && neighborState.getValue(CoalGeneratorBlock.ENERGY_CONNECTION_TYPE) == WireConnectionType.ENERGY_OUTPUT) {
-                System.out.println(direction);
-
-                if (level.getBlockEntity(neighborPos) instanceof CoalGeneratorBlockEntity neighborBlockEntity) {
-                    System.out.println("True 2");
-
-                    IEnergyStorage energyStorage = neighborBlockEntity.getEnergyStorage();
-                    if (energyStorage.getEnergyStored() > 0) {
-                        System.out.println("True 3");
-                    }
-                }
-            }
         }
     }
 }

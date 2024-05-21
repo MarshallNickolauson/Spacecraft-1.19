@@ -22,7 +22,7 @@ import java.util.List;
 public class SolarPanelBlock extends AbstractMachineBlock {
 
     public SolarPanelBlock() {
-        super(WireConnectionType.ENERGY_INPUT);
+        super(WireConnectionType.ENERGY_OUTPUT);
     }
 
     @Override

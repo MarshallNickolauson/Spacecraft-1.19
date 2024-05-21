@@ -11,6 +11,7 @@ import net.marsh.spacecraft.recipe.ModRecipes;
 import net.marsh.spacecraft.render.ModMenuTypes;
 import net.marsh.spacecraft.render.screen.*;
 import net.marsh.spacecraft.sound.ModSounds;
+import net.marsh.spacecraft.world.ServerTickHandler;
 import net.marsh.spacecraft.world.feature.ModConfiguredFeatures;
 import net.marsh.spacecraft.world.feature.ModPlacedFeatures;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -48,6 +49,7 @@ public class Spacecraft {
 
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
+        MinecraftForge.EVENT_BUS.register(ServerTickHandler.class);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
