@@ -18,17 +18,14 @@ import java.util.Set;
 public class WireBlockEntity extends BlockEntity {
 
     private LazyOptional<IEnergyStorage> energyStorage = LazyOptional.empty();
-    private EnergyNetwork energyNetwork;
+    private EnergyNetwork energyNetwork = null;
 
     public WireBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(ModBlockEntities.WIRE_BLOCK.get(), pPos, pBlockState);
-        this.energyNetwork = null;
     }
 
     public void updateConnection() {
         if (level == null || level.isClientSide()) return;
-
-        System.out.println("got here");
 
         // Find adjacent wire block entities
         Set<WireBlockEntity> adjacentWireEntities = new HashSet<>();
@@ -39,30 +36,38 @@ public class WireBlockEntity extends BlockEntity {
             }
         }
 
-        // Check if any adjacent wire entity belongs to a network
-        EnergyNetwork existingNetwork = null;
-        for (WireBlockEntity adjacentWireEntity : adjacentWireEntities) {
-            if (adjacentWireEntity.getEnergyNetwork() != null) {
-                existingNetwork = adjacentWireEntity.getEnergyNetwork();
-                break;
+        if (adjacentWireEntities.size() > 0) {
+            // Check if any adjacent wire entity belongs to a network
+            EnergyNetwork existingNetwork = null;
+            for (WireBlockEntity adjacentWireEntity : adjacentWireEntities) {
+                if (adjacentWireEntity.getEnergyNetwork() != null) {
+                    existingNetwork = adjacentWireEntity.getEnergyNetwork();
+                    break;
+                }
             }
+
+            if (existingNetwork != null) {
+                this.energyNetwork = existingNetwork;
+                energyNetwork.addWire(this);
+            } else {
+                System.out.println("updateConnection method in wireblockentity not working!");
+            }
+
+            // Merge adjacent networks
+//            for (WireBlockEntity adjacentWireEntity : adjacentWireEntities) {
+//                if (adjacentWireEntity.getEnergyNetwork() != this.energyNetwork) {
+//                    this.energyNetwork.merge(adjacentWireEntity.getEnergyNetwork());
+//                }
+//            }
+
         }
 
-        if (existingNetwork != null) {
-            this.energyNetwork = existingNetwork;
-        } else {
+        if (this.energyNetwork == null) {
             this.energyNetwork = new EnergyNetwork();
             EnergyNetworkManager.INSTANCE.registerNetwork(this.energyNetwork);
-        }
-
-        energyNetwork.clear();
-        energyNetwork.addWire(this);
-
-        // Merge adjacent networks
-        for (WireBlockEntity adjacentWireEntity : adjacentWireEntities) {
-            if (adjacentWireEntity.getEnergyNetwork() != this.energyNetwork) {
-                this.energyNetwork.merge(adjacentWireEntity.getEnergyNetwork());
-            }
+            energyNetwork.addWire(this);
+        } else {
+            System.out.println("Nothing was done!");
         }
     }
 
@@ -72,16 +77,19 @@ public class WireBlockEntity extends BlockEntity {
 
     public void remove() {
         if (energyNetwork != null) {
+            System.out.println("removing wire...");
             energyNetwork.removeWire(this);
-            if (energyNetwork.isEmpty()) {
-                EnergyNetworkManager.INSTANCE.unregisterNetwork(energyNetwork);
+            System.out.println("wires left: " + energyNetwork.getWires().size());
+            if (energyNetwork.getWires().size() == 0) {
+                energyNetwork.clear();
+                EnergyNetworkManager.INSTANCE.unregisterNetwork(this.energyNetwork);
             }
         }
     }
 
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, WireBlockEntity wireBlockEntity) {
         if (level.isClientSide()) {
-            return;
+            wireBlockEntity.updateConnection();
         }
     }
 }

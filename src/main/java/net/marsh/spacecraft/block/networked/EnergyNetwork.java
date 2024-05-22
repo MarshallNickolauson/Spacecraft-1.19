@@ -7,6 +7,7 @@ import net.marsh.spacecraft.util.WireConnectionType;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.energy.IEnergyStorage;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -18,6 +19,10 @@ public class EnergyNetwork {
     private final Set<AbstractMachineBlockEntity> generators = new HashSet<>();
     private final Set<AbstractMachineBlockEntity> machines = new HashSet<>();
 
+    public Set<WireBlockEntity> getWires() {
+        return wires;
+    }
+
     public void addWire(WireBlockEntity wire) {
         wires.add(wire);
         updateNetwork();
@@ -25,7 +30,7 @@ public class EnergyNetwork {
 
     public void removeWire(WireBlockEntity wire) {
         wires.remove(wire);
-        updateNetwork(); //TODO this call might be unnecessary
+        updateNetwork();
     }
 
     public void clear() {
@@ -75,95 +80,49 @@ public class EnergyNetwork {
     }
 
     public void distributeEnergy() {
+        int totalEnergy = 0;
+        for (AbstractMachineBlockEntity generator : generators) {
+            IEnergyStorage energyStorage = generator.getCapability(ForgeCapabilities.ENERGY, null).orElse(null);
+            if (energyStorage != null) {
+                totalEnergy += energyStorage.getEnergyStored();
+            }
+        }
 
-        //TODO redo the logic of this if needed
+        Set<AbstractMachineBlockEntity> machinesThatCanReceive = new HashSet<>();
+        for (AbstractMachineBlockEntity machine : machines) {
+            IEnergyStorage energyStorage = machine.getCapability(ForgeCapabilities.ENERGY, null).orElse(null);
+            if (energyStorage != null && energyStorage.canReceive()) {
+                machinesThatCanReceive.add(machine);
+            }
+        }
 
-//        int totalEnergy = 0;
-//        for (AbstractMachineBlockEntity generator : generators) {
-//            IEnergyStorage energyStorage = null;
-//
-//            for (Direction direction : Direction.values()) {
-//                LazyOptional<IEnergyStorage> energyOpt = generator.getCapability(ForgeCapabilities.ENERGY, direction);
-//                if (energyOpt.isPresent()) {
-//                    energyStorage = energyOpt.orElse(null);
-//                    break;
-//                }
-//            }
-//
-//            if (energyStorage != null) {
-//                totalEnergy += energyStorage.getEnergyStored();
-//            }
-//        }
-//
-//        Set<AbstractMachineBlockEntity> machinesThatCanReceive = new HashSet<>();
-//        for (AbstractMachineBlockEntity machine : machines) {
-//            IEnergyStorage energyStorage = null;
-//
-//            for (Direction direction : Direction.values()) {
-//                LazyOptional<IEnergyStorage> energyOpt = machine.getCapability(ForgeCapabilities.ENERGY, direction);
-//                if (energyOpt.isPresent()) {
-//                    energyStorage = energyOpt.orElse(null);
-//                    break;
-//                }
-//            }
-//
-//            if (energyStorage != null && energyStorage.canReceive()) {
-//                machinesThatCanReceive.add(machine);
-//            }
-//        }
-//
-//        int machineCount = machinesThatCanReceive.size();
-//
-//        int energyPerMachine = 0;
-//        if (machineCount != 0) {
-//            energyPerMachine = totalEnergy / machineCount;
-//        }
-//
-//        for (AbstractMachineBlockEntity machine : machinesThatCanReceive) {
-//            IEnergyStorage energyStorage = null;
-//
-//            for (Direction direction : Direction.values()) {
-//                LazyOptional<IEnergyStorage> energyOpt = machine.getCapability(ForgeCapabilities.ENERGY, direction);
-//                if (energyOpt.isPresent()) {
-//                    energyStorage = energyOpt.orElse(null);
-//                    break;
-//                }
-//            }
-//
-//            if (energyStorage != null) {
-//                energyStorage.receiveEnergy(energyPerMachine, false);
-//            }
-//        }
-//
-//        int extractPerGenerator = energyPerMachine * machineCount;
-//        for (AbstractMachineBlockEntity generator : generators) {
-//            IEnergyStorage energyStorage = null;
-//
-//            for (Direction direction : Direction.values()) {
-//                LazyOptional<IEnergyStorage> energyOpt = generator.getCapability(ForgeCapabilities.ENERGY, direction);
-//                if (energyOpt.isPresent()) {
-//                    energyStorage = energyOpt.orElse(null);
-//                    break;
-//                }
-//            }
-//
-//            if (energyStorage != null) {
-//                totalEnergy += energyStorage.extractEnergy(extractPerGenerator, false);
-//            }
-//        }
+        int machineCount = machinesThatCanReceive.size();
+        int energyPerMachine = machineCount == 0 ? 0 : totalEnergy / machineCount;
+
+        for (AbstractMachineBlockEntity machine : machinesThatCanReceive) {
+            IEnergyStorage energyStorage = machine.getCapability(ForgeCapabilities.ENERGY, null).orElse(null);
+            if (energyStorage != null) {
+                energyStorage.receiveEnergy(energyPerMachine, false);
+            }
+        }
+
+        int extractPerGenerator = energyPerMachine * machineCount;
+        for (AbstractMachineBlockEntity generator : generators) {
+            IEnergyStorage energyStorage = generator.getCapability(ForgeCapabilities.ENERGY, null).orElse(null);
+            if (energyStorage != null) {
+                energyStorage.extractEnergy(extractPerGenerator, false);
+            }
+        }
     }
 
-    //TODO build merge of networks
-    public void merge(EnergyNetwork otherNetwork) {
-        this.wires.addAll(otherNetwork.wires);
-        this.generators.addAll(otherNetwork.generators);
-        this.machines.addAll(otherNetwork.machines);
-        otherNetwork.clear();
-        EnergyNetworkManager.INSTANCE.unregisterNetwork(otherNetwork);
-        updateNetwork();
-    }
-
-    //TODO build split of networks
+//    public void merge(EnergyNetwork otherNetwork) {
+//        this.wires.addAll(otherNetwork.wires);
+//        this.generators.addAll(otherNetwork.generators);
+//        this.machines.addAll(otherNetwork.machines);
+//        otherNetwork.clear();
+//        EnergyNetworkManager.INSTANCE.unregisterNetwork(otherNetwork);
+//        updateNetwork();
+//    }
 
     public boolean isEmpty() {
         return wires.isEmpty() && generators.isEmpty() && machines.isEmpty();
